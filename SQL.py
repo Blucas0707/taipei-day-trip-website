@@ -4,7 +4,7 @@ import pymysql
 sql_connect_info ={
     "host":"localhost",
     "user":"root",
-    "password":"[password]",
+    "password":"password",
     "Database":"travel_info",
 }
 
@@ -113,6 +113,15 @@ class SQLDB:
             new_dict["mrt"] = result[6]
             new_dict["latitude"] = float(result[7])
             new_dict["longitude"] = float(result[8])
+            # get image link
+            sql = "select link from taipei_travel_images where id = %s "
+            cursor.execute(sql, new_dict["id"])
+            results = cursor.fetchall()
+            image_links = []
+            for result in results:
+                image_links.append(result[0])
+
+            new_dict["images"] = image_links
             data_dict["data"].append(new_dict)
 
         return data_dict

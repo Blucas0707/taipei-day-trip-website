@@ -28,7 +28,7 @@ def thankyou():
 #旅遊景點API
 @app.route("/api/attractions", methods = ["GET"])
 def api_attractions():
-
+	#get page & keyword variables
 	page = 0 if not request.args.get("page") else int(request.args.get("page"))
 	keyword = "" if not request.args.get("keyword") else request.args.get("keyword")
 	para = (page,keyword)
@@ -68,4 +68,5 @@ def not_found_error(error):
   		"message": "Forbidden. Access denied."
 	}
 	return json.dumps(data_dict, sort_keys= False, indent= 4)
-app.run(port=3000)
+app.run(host="0.0.0.0", port=3000)
+# app.run(port=3000)
