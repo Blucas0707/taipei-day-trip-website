@@ -4,7 +4,7 @@ import pymysql
 sql_connect_info ={
     "host":"localhost",
     "user":"root",
-    "password":"root1234",
+    "password":"[password]",
     "Database":"travel_info",
 }
 
