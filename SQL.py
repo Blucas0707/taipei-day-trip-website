@@ -4,7 +4,7 @@ import pymysql
 sql_connect_info ={
     "host":"localhost",
     "user":"root",
-    "password":"password",
+    "password":"[your password]",
     "Database":"travel_info",
 }
 
@@ -98,7 +98,7 @@ class SQLDB:
             sql = "select * from (select * from taipei_travel_info order by id) as T limit %s,12"
             para = (offset)
         else:
-            sql = "select * from (select * from taipei_travel_info order by id)as T where category like %s limit %s,12"
+            sql = "select * from (select * from taipei_travel_info order by id)as T where name like %s limit %s,12"
             para = ("%"+keyword+"%", offset)
         cursor.execute(sql,para)
         results = cursor.fetchall()
