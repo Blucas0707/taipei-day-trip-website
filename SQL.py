@@ -1,19 +1,25 @@
 import pymysql
+from dotenv import dotenv_values
+
 
 #基本登入資訊 only for test use, not official info
-sql_connect_info ={
-    "host":"localhost",
-    "user":"root",
-    "password":"[your password]",
-    "Database":"travel_info",
-}
+# sql_connect_info ={
+#     "host":"localhost",
+#     "user":"root",
+#     "password":"[your password]",
+#     "Database":"travel_info",
+# }
+
+#load .env config
+config = dotenv_values(".env")
+
 
 class SQLDB:
     def __init__(self):
-        self.host = sql_connect_info['host']
-        self.user = sql_connect_info['user']
-        self.password = sql_connect_info['password']
-        self.database = sql_connect_info['Database']
+        self.host = config["SQL_HOST"]
+        self.user = config["SQL_USER"]
+        self.password = config["SQL_PASSWORD"]
+        self.database = config["SQL_DATABASE"]
         self.conn = pymysql.connect(host=self.host, user=self.user, password=self.password, db=self.database)
 
     def Update(self, para= None):
