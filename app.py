@@ -1,3 +1,9 @@
+from SQL import SQLDB
+import json
+
+#set mysql
+mysql = SQLDB()
+
 from flask import *
 app=Flask(__name__)
 app.config["JSON_AS_ASCII"]=False
@@ -17,4 +23,50 @@ def booking():
 def thankyou():
 	return render_template("thankyou.html")
 
-app.run(port=3000)
+
+
+#旅遊景點API
+@app.route("/api/attractions", methods = ["GET"])
+def api_attractions():
+	#get page & keyword variables
+	page = 0 if not request.args.get("page") else int(request.args.get("page"))
+	keyword = "" if not request.args.get("keyword") else request.args.get("keyword")
+	para = (page,keyword)
+	data_dict = mysql.get_api_attractions(page = page, keyword = keyword)
+	jsonformat = json.dumps(data_dict, sort_keys=False, indent = 4)
+	return jsonformat
+
+
+@app.route("/api/attraction/<attractionId>", methods = ["GET"])
+def api_attractionId(attractionId):
+	#get data from sql
+	result = mysql.get_api_attractionId((attractionId))
+	#return to web
+	return json.dumps(result, sort_keys=False, indent = 4)
+
+#error handle
+@app.errorhandler(500)
+def internal_error(error):
+	data_dict = {
+		"error": True,
+  		"message": "Internal Server Error."
+	}
+	return json.dumps(data_dict, sort_keys= False, indent= 4)
+
+@app.errorhandler(404)
+def not_found_error(error):
+	data_dict = {
+		"error": True,
+  		"message": "Website not found."
+	}
+	return json.dumps(data_dict, sort_keys= False, indent= 4)
+
+@app.errorhandler(403)
+def not_found_error(error):
+	data_dict = {
+		"error": True,
+  		"message": "Forbidden. Access denied."
+	}
+	return json.dumps(data_dict, sort_keys= False, indent= 4)
+app.run(host="0.0.0.0", port=3000)
+# app.run(port=3000)
