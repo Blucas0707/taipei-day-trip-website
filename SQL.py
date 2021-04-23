@@ -17,7 +17,6 @@ class SQLDB:
         print("連線成功")
 
     def Update(self, para= None):
-
         sql = "REPLACE INTO taipei_travel_info (id, name, category, description, address, transport, mrt, latitude, longitude) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')"
         cursor = self.conn.cursor()
         cursor.execute(sql, para)
@@ -40,14 +39,11 @@ class SQLDB:
     def get_api_attractionId(self, para = None):
         #judge id include invalid character
         try:
-            # para = int(para)
             data_dict = {}
             cursor = self.conn.cursor()
             sql = "select * from taipei_travel_info where id = %s limit 1"
             cursor.execute(sql, (para,))
             results = cursor.fetchall()
-            # print(len(results))
-            # print(results)
             # judge id not in sql
             if len(results) == 0:
                 data_dict = {
@@ -79,7 +75,6 @@ class SQLDB:
                 image_links = []
                 for result in results:
                     image_links.append(result[0])
-
                 data_dict["data"]["images"] = image_links
 
         except:
@@ -98,10 +93,10 @@ class SQLDB:
             "data":[]
         }
 
-        cursor = self.conn.cursor(buffered=True)
+        cursor = self.conn.cursor()
         if keyword == "":
             sql = "select * from (select * from taipei_travel_info order by id) as T limit %s,12"
-            para = ((offset),)
+            para = (offset,)
         else:
             sql = "select * from (select * from taipei_travel_info order by id)as T where name like %s limit %s,12"
             para = ("%"+keyword+"%", offset)
