@@ -32,6 +32,7 @@ def api_attractions():
 	page = 0 if not request.args.get("page") else int(request.args.get("page"))
 	keyword = "" if not request.args.get("keyword") else request.args.get("keyword")
 	para = (page,keyword)
+	print(para)
 	data_dict = mysql.get_api_attractions(page = page, keyword = keyword)
 	jsonformat = json.dumps(data_dict, sort_keys=False, indent = 4)
 	return jsonformat
