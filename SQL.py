@@ -115,7 +115,7 @@ class SQLDB:
             new_dict["longitude"] = float(result[8])
             # get image link
             sql = "select link from taipei_travel_images where id = '%s'"
-            cursor.execute(sql, new_dict["id"])
+            cursor.execute(sql, (new_dict["id"],))
             results = cursor.fetchall()
             image_links = []
             for result in results:
