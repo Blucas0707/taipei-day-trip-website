@@ -79,7 +79,7 @@ body {
   display: flex;
   align-items: center;
   height: 41px;
-  padding-top: 10px;
+  padding-top: 15px;
   padding-bottom: 10px;
   font-family: Noto Sans TC;
   font-style: normal;
@@ -92,7 +92,7 @@ body {
 .cover-greeting2 {
   height: 22px;
   padding-top: 5px;
-  padding-bottom: 10px;
+  padding-bottom: 25px;
   font-family: Noto Sans TC;
   font-style: normal;
   font-weight: normal;
