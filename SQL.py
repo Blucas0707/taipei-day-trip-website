@@ -102,27 +102,33 @@ class SQLDB:
             para = ("%"+keyword+"%", offset)
         cursor.execute(sql,para)
         results = cursor.fetchall()
-        for result in results:
-            new_dict = {}
-            new_dict["id"] = result[0]
-            new_dict["name"] = result[1]
-            new_dict["category"] = result[2]
-            new_dict["description"] = result[3]
-            new_dict["address"] = result[4]
-            new_dict["transport"] = result[5]
-            new_dict["mrt"] = result[6]
-            new_dict["latitude"] = float(result[7])
-            new_dict["longitude"] = float(result[8])
-            # get image link
-            sql = "select link from taipei_travel_images where id = '%s'"
-            cursor.execute(sql, (new_dict["id"],))
-            results = cursor.fetchall()
-            image_links = []
-            for result in results:
-                image_links.append(result[0])
 
-            new_dict["images"] = image_links
-            data_dict["data"].append(new_dict)
+        #no further data
+        if len(results) == 0:
+            data_dict["nextPage"] = None
+            data_dict["data"] = None
+        else:
+            for result in results:
+                new_dict = {}
+                new_dict["id"] = result[0]
+                new_dict["name"] = result[1]
+                new_dict["category"] = result[2]
+                new_dict["description"] = result[3]
+                new_dict["address"] = result[4]
+                new_dict["transport"] = result[5]
+                new_dict["mrt"] = result[6]
+                new_dict["latitude"] = float(result[7])
+                new_dict["longitude"] = float(result[8])
+                # get image link
+                sql = "select link from taipei_travel_images where id = '%s'"
+                cursor.execute(sql, (new_dict["id"],))
+                results = cursor.fetchall()
+                image_links = []
+                for result in results:
+                    image_links.append(result[0])
+
+                new_dict["images"] = image_links
+                data_dict["data"].append(new_dict)
 
         return data_dict
 
