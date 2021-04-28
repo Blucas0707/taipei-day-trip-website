@@ -3,9 +3,6 @@
   padding: 0;
 }
 
-body {
-  overflow-x: auto;
-}
 
 /* nav */
 .nav-bar {
@@ -41,7 +38,7 @@ body {
 
 .nav-schedule {
   height: 14px;
-  margin: 20px 10px;
+  margin: 10px 20px 10px 0;
   font-family: Noto Sans TC;
   font-style: normal;
   font-weight: normal;
@@ -52,7 +49,7 @@ body {
 
 .nav-login {
   height: 14px;
-  margin: 20px 10px;
+  margin: 10px 0;
   font-family: Noto Sans TC;
   font-style: normal;
   font-weight: normal;
@@ -66,6 +63,7 @@ body {
   height: 320px;
   background: linear-gradient(to top left, #6baebf, #a1d7e8);
   z-index: -1;
+  overflow-x: hidden;
 }
 
 .cover-content {
@@ -100,12 +98,9 @@ body {
   line-height: 13px;
 }
 
-.cover-image {
-  position: absolute;
-  right: 10%;
-  max-width: 650px;
-  max-height: 320px;
-  z-index: 0;
+.cover-img {
+  position:absolute;
+  right:10%;
 }
 
 /* img */
@@ -244,6 +239,15 @@ footer {
 }
 
 @media (min-width: 600px) and (max-width:1200px) {
+  .cover {
+    position:relative;
+  }
+  .cover-img {
+    position: absolute;
+    height: 60%;
+    bottom: 0;
+    right: 8%;
+  }
   .image-gallery {
     display: flex;
     flex-wrap: wrap;
@@ -256,20 +260,6 @@ footer {
     width: 45%;
   }
 
-  .cover-image {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    right: 0;
-    z-index: 0;
-  }
-
-  .cover-image img {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    height: 80%;
-  }
 
   form.search input {
     /* flex:none; */
@@ -285,21 +275,13 @@ footer {
 
   .cover {
     height: 280px;
+    position:relative;
   }
-
-  .cover-image {
-    position: absolute;
-    width: 50%;
-    height: 280px;
-    right: 0;
-    z-index: 0;
-  }
-
-  .cover-image img {
-    position: absolute;
+  .cover-img {
+    height: 60%;
     bottom: 0;
-    right: -40%;
-    height: 50%;
+    right: -20%;
+    max-height: 148px;
   }
 
   .cover-content {
