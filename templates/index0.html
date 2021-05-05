@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>台北一日遊</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../static/css/index-style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="../static/img/favicon.ico">
+    <script type="text/javascript">
+
+
+
+    //models
+    let models={
+      nextPage:0,
+      getProductData:function(){
+        let keyword;
+        keyword = document.getElementById("keyword").catch(return "";);
+        let url  = "/api/attractions?page="+ this.nextPage + "&keyword=" + this.keyword;
+
+      }
+    };
+    //views
+    let views={
+
+    };
+    //controllers
+    let controller={
+      init:function(){
+        models.getProductData();
+        views.renderData();
+      }
+    };
+
+    </script>
+  </head>
+  <body id="body" onload="get_all_data(next_page,keyword);">
+    <div class="nav-bar">
+      <div class="nav-bar-items">
+        <div class="nav-title">台北一日遊</div>
+        <div class="nav-menu">
+          <div class="nav-schedule">預定行程</div>
+          <div class="nav-login">登入/註冊</div>
+        </div>
+      </div>
+    </div>
+    <div class="cover">
+      <div class="cover-content">
+        <div class="cover-greeting">輕鬆享受台北一日悠閒</div>
+        <div class="cover-greeting2">探索每個角落，體驗城市的深度旅遊行程</div>
+        <div class="cover-search">
+          <form class="search" name ="search-keyword">
+            <input type="search" placeholder="輸入景點名稱查詢" name="keyword" id="keyword" class="search">
+            <input type="text" style="display: none">
+          </form>
+          <button type="button" onclick="search_keyword();"><img src="../static/img/icon_search.svg"></button>
+
+        </div>
+
+      </div>
+      <!-- <div class="cover-image"> -->
+      <img src="../static/img/welcome 1.svg" class="cover-img">
+      <!-- </div> -->
+    </div>
+
+    <div class="image-gallery" id = "img-gallery-contain"></div>
+    <footer class="copyright" id="footer">COPYRIGHT &copy;2021 台北一日遊</footer>
+  </body>
+</html>

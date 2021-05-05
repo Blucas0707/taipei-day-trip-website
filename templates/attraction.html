@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>台北一日遊</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="../static/css/attraction-style.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="../static/img/favicon.ico">
+  <script src="../static/js/attraction.js" async></script>
+</head>
+
+<body id="body">
+  <div class="nav-bar">
+    <div class="nav-bar-items">
+      <div class="nav-title"><a href="/">台北一日遊</a></div>
+      <div class="nav-buffer"></div>
+      <div class="nav-menu">
+        <div class="nav-schedule">預定行程</div>
+        <div class="nav-login">登入/註冊</div>
+      </div>
+    </div>
+  </div>
+  <main>
+    <div class="product">
+      <div class="img">
+        <img src="../static/img/btn_leftArrow.svg" class="img-left">
+        <img src="../static/img/btn_rightArrow.svg" class="img-right">
+        <ul class="img-order"></ul>
+      </div>
+      <div class="info">
+        <div class="name"></div>
+        <div class="location"></div>
+        <div class="booking">
+          <div class="booking-name">訂購導覽行程</div>
+          <div class="booking-story">以此景點為中心的一日行程，帶您探索城市角落故事</div>
+          <div class="booking-date">選擇日期：
+            <input type="date" id="date">
+          </div>
+          <div class="booking-time">選擇時間：
+            <input type="radio" name="time" class="time-select" id="timeUp" value="upper"><label for="upper">上半天</label>
+            <input type="radio" name="time" class="time-select" id="timeDown" value="downer"><label for="downer">下半天</label>
+          </div>
+          <div class="booking-fee">導覽費用：<span class="total-fee"></span></div>
+          <div class="booking-confirm">開始預定行程</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="description">
+      <div class="content"></div>
+      <div class="address">
+        <div class="address-title">景點地址：</div>
+        <div class="address-content"></div>
+      </div>
+      <div class="traffic">
+        <div class="traffic-title">交通方式：</div>
+        <div class="traffic-content"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="copyright" id="footer">COPYRIGHT &copy;2021 台北一日遊</footer>
+</body>
+
+</html>

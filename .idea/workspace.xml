@@ -4,6 +4,7 @@
     <list default="true" id="16baa4a1-d393-4f7b-91b4-2bd5432d8c25" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/css/index-style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/index-style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/attraction.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/attraction.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
