@@ -19,6 +19,19 @@ let models = {
 let views = {
   images:null,
   imageIndex:0,
+  showLogin:function(){
+    let hideall = document.querySelector(".hideall");
+    hideall.style.display="block";  //顯示隱藏層
+    hideall.style.height=document.body.clientHeight+"px";  //設定隱藏層的高度為當前頁面高度   px是字尾
+    let loginBox = document.querySelector(".login-box");
+    loginBox.style.display = "block"; //顯示彈出層
+  },
+  cancelLogin:function(){
+    let hideall = document.querySelector(".hideall");
+    hideall.style.display="none";
+    let loginBox = document.querySelector(".login-box");
+    loginBox.style.display="none";
+  },
   renderImageorder:function(){
     //remove all child first
     div = document.querySelector(".img-order");
@@ -70,15 +83,26 @@ let views = {
     //show img order dot
     this.renderImageorder();
 
-
     // choose package;
     controller.choosePackage();
     controller.clickImage();
+
+    //login/register or cancel login
+    controller.login();
+    controller.cancelLogin();
   },
 
 };
 //controller
 let controller = {
+  cancelLogin:function(){
+    let cancelLoginbtn = document.querySelector(".login-cancel");
+    cancelLoginbtn.addEventListener("click",views.cancelLogin);
+  },
+  login:function(){
+    let login = document.querySelector(".nav-login");
+    login.addEventListener("click",views.showLogin);
+  },
   choosePackage:function(){
     const timeUp = document.querySelector("#timeUp");
     const timeDown = document.querySelector("#timeDown");

@@ -14,10 +14,21 @@
 </head>
 
 <body id="body">
+  <div class="hideall"></div>
+  <div class="login-box">
+    <div class="login-header"></div>
+    <div class="login-title">
+      登入會員帳號
+      <img src="../static/img/icon_close.svg" alt="" class="login-cancel">
+    </div>
+    <input type="text" name="email" placeholder="輸入電子信箱" class="login-email">
+    <input type="password" name="password" placeholder="輸入密碼" class="login-password">
+    <div class="login-btn">登入帳戶</div>
+    <div class="login-register">還沒有帳戶？點此註冊</div>
+  </div>
   <div class="nav-bar">
     <div class="nav-bar-items">
       <div class="nav-title"><a href="/">台北一日遊</a></div>
-      <div class="nav-buffer"></div>
       <div class="nav-menu">
         <div class="nav-schedule">預定行程</div>
         <div class="nav-login">登入/註冊</div>
@@ -38,7 +49,7 @@
           <div class="booking-name">訂購導覽行程</div>
           <div class="booking-story">以此景點為中心的一日行程，帶您探索城市角落故事</div>
           <div class="booking-date">選擇日期：
-            <input type="date" id="date">
+            <input type="date" id="date" class="booking-date-input">
           </div>
           <div class="booking-time">選擇時間：
             <input type="radio" name="time" class="time-select" id="timeUp" value="upper"><label for="upper">上半天</label>
