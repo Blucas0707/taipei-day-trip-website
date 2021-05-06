@@ -3,6 +3,108 @@
   padding: 0;
 }
 
+/* login */
+.hideall {
+  display: none;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  background: #000000;
+  opacity: 0.25;
+  z-index: 3;
+}
+.login-box {
+  display: none;
+  position: fixed;
+  top:80px;
+  left: calc(50% - 170px);
+  width:340px;
+  height:275px;
+  background-color: white;
+  z-index: 4;
+}
+
+.login-header {
+  height:10px;
+  background: linear-gradient(to top left, #6baebf, #a1d7e8);
+}
+
+.login-title {
+  position: relative;
+  margin:15px;
+  text-align: center;
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 24px;
+  color: #666666;
+}
+
+.login-cancel {
+  position: absolute;
+  top: 0;
+  right: 17px;
+  width: 16px;
+  height: 16px;
+}
+.login-cancel:hover {
+  cursor: pointer;
+}
+.login-email, .login-password {
+  margin:0 15px 10px;
+  border: 1px solid #CCCCCC;
+  box-sizing: border-box;
+  border-radius: 5px;
+  width: 310px;
+  height: 47px;
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 13px;
+  color: #666666;
+  padding-left:15px;
+}
+
+.login-btn {
+  display: flex;
+  width: 310px;
+  height: 47px;
+  margin:0 15px 10px;
+  background: #448899;
+  border-radius: 5px;
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 19px;
+  line-height: 16px;
+  color: #FFFFFF;
+  justify-content: center;
+  align-items: center;
+}
+.login-btn:hover {
+  cursor: pointer;
+}
+
+.login-register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 310px;
+  height: 22px;
+  margin:0 15px 15px;
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 13px;
+  color: #666666;
+}
+.login-register:hover {
+  cursor: pointer;
+}
 
 /* nav */
 .nav-bar {
@@ -63,6 +165,9 @@ a,a:link,a:visited {
   font-size: 16px;
   line-height: 13px;
   color: #666666;
+}
+.nav-login:hover{
+  cursor: pointer;
 }
 
 .cover {

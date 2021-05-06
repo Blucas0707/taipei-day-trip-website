@@ -36,6 +36,19 @@ let views={
     }
     models.nextPage = 0;
   },
+  showLogin:function(){
+    let hideall = document.querySelector(".hideall");
+    hideall.style.display="block";  //顯示隱藏層
+    hideall.style.height=document.body.clientHeight+"px";  //設定隱藏層的高度為當前頁面高度   px是字尾
+    let loginBox = document.querySelector(".login-box");
+    loginBox.style.display = "block"; //顯示彈出層
+  },
+  cancelLogin:function(){
+    let hideall = document.querySelector(".hideall");
+    hideall.style.display="none";
+    let loginBox = document.querySelector(".login-box");
+    loginBox.style.display="none";
+  },
   scrolldown:function(){
     let need_scrolldown = true;
     //count scroll down ration > 90% load more next_page
@@ -124,12 +137,23 @@ let views={
     btn_keyword.addEventListener("click",controller.keywordSearch);
     //click img
     controller.imgClick();
+    //login/register or cancel login
+    controller.login();
+    controller.cancelLogin();
 
   }
 
 };
 //controllers
 let controller={
+  cancelLogin:function(){
+    let cancelLoginbtn = document.querySelector(".login-cancel");
+    cancelLoginbtn.addEventListener("click",views.cancelLogin);
+  },
+  login:function(){
+    let login = document.querySelector(".nav-login");
+    login.addEventListener("click",views.showLogin);
+  },
   imgClick:function(){
     let imgs = document.querySelectorAll("div.img");
     for(let i = 0;i<imgs.length;i++){

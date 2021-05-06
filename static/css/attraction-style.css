@@ -118,7 +118,8 @@ img {
   height: 36px;
   position: absolute;
   top: 45%;
-  opacity: 0.2;
+  opacity: 0.4;
+  z-index: 1;
 }
 
 .img-left {
@@ -129,12 +130,9 @@ img {
   right: 10px;
 }
 
-.img-left:hover {
+.img-left:hover , .img-right:hover {
   opacity: 0.8;
-}
-
-.img-right:hover {
-  opacity: 0.8;
+  cursor: pointer;
 }
 
 .img-order {
@@ -142,6 +140,7 @@ img {
   position: absolute;
   bottom: 10px;
   left: calc(50% + -15px);
+  z-index: 1;
 }
 
 .img-order-list {
@@ -339,6 +338,12 @@ footer {
 
 } */
 @media (min-width: 600px) and (max-width:1200px) {
+  .nav-bar {
+    position: fixed;
+    background-color: white;
+    border-bottom: 1px solid #E8E8E8;
+    z-index: 2;
+  }
   .product {
     display: flex;
     flex-wrap: wrap;

@@ -64,7 +64,7 @@ let views = {
     //images
     div = document.querySelector(".img");
     const img = document.createElement("img");
-    img.id = "img-pic";
+    img.className = "img-pic";
     img.src = this.images[this.imageIndex];
     div.appendChild(img);
     //show img order dot
@@ -93,7 +93,7 @@ let controller = {
   clickImage:function(){
     const imgLeft = document.querySelector(".img-left");
     const imgRight = document.querySelector(".img-right");
-    const img = document.getElementById("img-pic");
+    const img = document.querySelector(".img-pic");
     //click left
     imgLeft.addEventListener("click",()=>{
       views.imageIndex -= 1;
