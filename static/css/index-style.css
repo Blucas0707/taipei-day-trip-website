@@ -3,13 +3,116 @@
   padding: 0;
 }
 
-body {
-  overflow-x: auto;
+/* login */
+.hideall {
+  display: none;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  background: #000000;
+  opacity: 0.25;
+  z-index: 3;
+}
+.login-box {
+  display: none;
+  position: fixed;
+  top:80px;
+  left: calc(50% - 170px);
+  width:340px;
+  height:275px;
+  background-color: white;
+  z-index: 4;
+}
+
+.login-header {
+  height:10px;
+  background: linear-gradient(to top left, #6baebf, #a1d7e8);
+}
+
+.login-title {
+  position: relative;
+  margin:15px;
+  text-align: center;
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 24px;
+  color: #666666;
+}
+
+.login-cancel {
+  position: absolute;
+  top: 0;
+  right: 17px;
+  width: 16px;
+  height: 16px;
+}
+.login-cancel:hover {
+  cursor: pointer;
+}
+.login-email, .login-password {
+  margin:0 15px 10px;
+  border: 1px solid #CCCCCC;
+  box-sizing: border-box;
+  border-radius: 5px;
+  width: 310px;
+  height: 47px;
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 13px;
+  color: #666666;
+  padding-left:15px;
+}
+
+.login-btn {
+  display: flex;
+  width: 310px;
+  height: 47px;
+  margin:0 15px 10px;
+  background: #448899;
+  border-radius: 5px;
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 19px;
+  line-height: 16px;
+  color: #FFFFFF;
+  justify-content: center;
+  align-items: center;
+}
+.login-btn:hover {
+  cursor: pointer;
+}
+
+.login-register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 310px;
+  height: 22px;
+  margin:0 15px 15px;
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 13px;
+  color: #666666;
+}
+.login-register:hover {
+  cursor: pointer;
 }
 
 /* nav */
 .nav-bar {
   width: 100%;
+  position: fixed;
+  background-color: white;
+  z-index: 2;
+  border-bottom: 1px solid #E8E8E8;
 }
 
 .nav-bar-items {
@@ -31,7 +134,10 @@ body {
   font-size: 30px;
   line-height: 34px;
 }
-
+a,a:link,a:visited {
+  color: #438899;
+  text-decoration: none;
+}
 .nav-menu {
   flex: auto;
   display: flex;
@@ -41,7 +147,7 @@ body {
 
 .nav-schedule {
   height: 14px;
-  margin: 20px 10px;
+  margin: 10px 20px 10px 0;
   font-family: Noto Sans TC;
   font-style: normal;
   font-weight: normal;
@@ -52,7 +158,7 @@ body {
 
 .nav-login {
   height: 14px;
-  margin: 20px 10px;
+  margin: 10px 0;
   font-family: Noto Sans TC;
   font-style: normal;
   font-weight: normal;
@@ -61,11 +167,17 @@ body {
   color: #666666;
 }
 
+.nav-login:hover{
+  cursor: pointer;
+}
+
 .cover {
+  padding-top:54px;
   display: flex;
   height: 320px;
   background: linear-gradient(to top left, #6baebf, #a1d7e8);
   z-index: -1;
+  overflow-x: hidden;
 }
 
 .cover-content {
@@ -100,12 +212,9 @@ body {
   line-height: 13px;
 }
 
-.cover-image {
-  position: absolute;
-  right: 10%;
-  max-width: 650px;
-  max-height: 320px;
-  z-index: 0;
+.cover-img {
+  position:absolute;
+  right:10%;
 }
 
 /* img */
@@ -126,7 +235,10 @@ body {
   box-sizing: border-box;
   padding-bottom: 25px;
 }
+.img:hover {
+  cursor: pointer;
 
+}
 .img img {
   width: 100%;
   height: 74%;
@@ -210,7 +322,7 @@ form.search input {
   text-indent: 15px;
 }
 
-button {
+.keyin_Keyword {
   float: left;
   min-height: 46px;
   min-width: 60px;
@@ -244,6 +356,15 @@ footer {
 }
 
 @media (min-width: 600px) and (max-width:1200px) {
+  .cover {
+    position:relative;
+  }
+  .cover-img {
+    position: absolute;
+    height: 60%;
+    bottom: 0;
+    right: 8%;
+  }
   .image-gallery {
     display: flex;
     flex-wrap: wrap;
@@ -256,20 +377,6 @@ footer {
     width: 45%;
   }
 
-  .cover-image {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    right: 0;
-    z-index: 0;
-  }
-
-  .cover-image img {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    height: 80%;
-  }
 
   form.search input {
     /* flex:none; */
@@ -285,21 +392,13 @@ footer {
 
   .cover {
     height: 280px;
+    position:relative;
   }
-
-  .cover-image {
-    position: absolute;
-    width: 50%;
-    height: 280px;
-    right: 0;
-    z-index: 0;
-  }
-
-  .cover-image img {
-    position: absolute;
+  .cover-img {
+    height: 60%;
     bottom: 0;
-    right: -40%;
-    height: 50%;
+    right: -20%;
+    max-height: 148px;
   }
 
   .cover-content {

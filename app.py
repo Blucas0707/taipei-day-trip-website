@@ -1,8 +1,4 @@
-from SQL import SQLDB
-import json
-
-#set mysql
-mysql = SQLDB()
+from Model.api import get_api_attractions, get_api_attractionId,api_internal_error,api_not_found_error, api_not_allowed_error
 
 from flask import *
 app=Flask(__name__)
@@ -24,62 +20,31 @@ def thankyou():
 	return render_template("thankyou.html")
 
 
-
 #旅遊景點API
 @app.route("/api/attractions", methods = ["GET"])
 def api_attractions():
 	#get page & keyword variables
 	page = 0 if not request.args.get("page") else int(request.args.get("page"))
 	keyword = "" if not request.args.get("keyword") else request.args.get("keyword")
-	#防止特殊符號 & SQL injection
-	abandom_list = ['"',"'","%",";","="]
-	# print(page,keyword)
-	for c in str(page):
-		if c in abandom_list:
-			print("Invalid")
-			return render_template("index.html")
-	for c in str(keyword):
-		if c in abandom_list:
-			print("Invalid")
-			return render_template("index.html")
-
-	para = (page,keyword)
-	# print(para)
-	data_dict = mysql.get_api_attractions(page = page, keyword = keyword)
-	jsonformat = json.dumps(data_dict, sort_keys=False, indent = 4)
-	return jsonformat
+	return get_api_attractions(page,keyword)
 
 
 @app.route("/api/attraction/<attractionId>", methods = ["GET"])
 def api_attractionId(attractionId):
-	#get data from sql
-	result = mysql.get_api_attractionId((attractionId))
-	#return to web
-	return json.dumps(result, sort_keys=False, indent = 4)
+	return get_api_attractionId(attractionId)
 
 #error handle
 @app.errorhandler(500)
 def internal_error(error):
-	data_dict = {
-		"error": True,
-  		"message": "Internal Server Error."
-	}
-	return json.dumps(data_dict, sort_keys= False, indent= 4)
+	return api_internal_error()
 
 @app.errorhandler(404)
 def not_found_error(error):
-	data_dict = {
-		"error": True,
-  		"message": "Website not found."
-	}
-	return json.dumps(data_dict, sort_keys= False, indent= 4)
+	return api_not_found_error()
 
 @app.errorhandler(403)
-def not_found_error(error):
-	data_dict = {
-		"error": True,
-  		"message": "Forbidden. Access denied."
-	}
-	return json.dumps(data_dict, sort_keys= False, indent= 4)
+def not_allowed_error(error):
+	return api_not_allowed_error()
+
 app.run(host="0.0.0.0", port=3000, debug = True)
 # app.run(port=3000)

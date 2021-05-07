@@ -2,7 +2,7 @@ import json
 from SQL import SQLDB
 
 #Read json file
-with open("data/taipei-attractions.json") as f:
+with open("taipei-attractions.json") as f:
     file_content = json.load(f)
 #Rewrite json with better indent = 4
 with open("new_data.json","w") as f_write:
