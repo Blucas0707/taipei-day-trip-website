@@ -190,7 +190,7 @@ class SQLDB:
         cursor = con.cursor()
         cursor.execute(sql, para)
         results = cursor.fetchone()
-        
+
         # close sql connect
         con.close()
         # print(results)
