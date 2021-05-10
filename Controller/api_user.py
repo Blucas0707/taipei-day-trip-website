@@ -2,7 +2,6 @@ from Model.SQL import SQLDB
 import json
 import hashlib
 from flask import *
-from Model.cookie import *
 from Controller.user_session import *
 from dotenv import dotenv_values
 
