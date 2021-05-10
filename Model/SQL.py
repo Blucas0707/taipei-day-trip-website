@@ -175,7 +175,7 @@ class SQLDB:
         # close sql connect
         con.close()
         print(f"result={result}")
-        if len(result) == 1:  # user info match
+        if result[0] == 1:  # user info match
             return 200
         else:
             return 400

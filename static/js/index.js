@@ -76,6 +76,24 @@ let models={
     });
 
   },
+  validateLogin:function(){
+    let email = document.querySelector(".login-email").value;
+    let password = document.querySelector(".login-password").value;
+    // regular rules
+    // var emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+    let emailCheck = true;
+    let passwordCheck = true;
+    emailCheck = email.length > 0; //check email format
+    passwordCheck = password.length > 0; //check password >= 0
+    console.log(emailCheck,passwordCheck);
+    this.loginData = {
+      "email":emailCheck,
+      "password":passwordCheck
+    };
+
+    return emailCheck&&passwordCheck;
+
+  },
   getuserLogin:function(){
     // let formElement = document.querySelector("#login-form");
     // let email = formElement.email.value;
@@ -145,6 +163,13 @@ let views={
       navLogout.style.display = "block";
     }
   },
+  renderLoginValidation:function(){
+    let loginstatus = document.querySelector(".login-status");
+    loginstatus.style.display = "block";
+    if(models.loginData.name == false || models.loginData.password == false){
+      loginstatus.innerHTML = "帳號或密碼不得為空";
+    }
+  },
   LoginStatus:function(){
     let loginstatus = document.querySelector(".login-status");
     loginstatus.style.display = "block";
@@ -190,8 +215,6 @@ let views={
           registerstatus.innerHTML = "密碼必須大於6個字元";
         }
       }
-
-
     }
   },
   showRegister:function(){
@@ -359,9 +382,15 @@ let controller={
   userLogin:function(){
     let login = document.querySelector(".login-btn");
     login.addEventListener("click",()=>{
-      models.getuserLogin().then(()=>{
-        views.LoginStatus();
-      });
+      let validation = models.validateLogin(); //驗證登入資料
+      console.log(validation);
+      if(validation){
+        models.getuserLogin().then(()=>{
+          views.LoginStatus();
+        });
+      }else{
+        views.renderLoginValidation();
+      }
     });
   },
   cancelLoginRegister:function(){

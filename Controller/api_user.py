@@ -52,22 +52,27 @@ def get_api_user(app):
 
 def get_user_info_login():
     sessions = getSession()
-    print(sessions)
+    print(f"session:{sessions}")
     if sessions != False:
         # email = sessions[0]
         # password = sessions[1]
         para = sessions #email, password
         results = mysql.checkLogin(para)
-        data_dict = {
-            "data": {
-                "id": results[0],
-                "name": results[1],
-                "email": results[2]
+        print(f"results:{results}")
+        if results != None:
+            data_dict = {
+                "data": {
+                    "id": results[0],
+                    "name": results[1],
+                    "email": results[2]
+                }
             }
-        }
+        else:
+            data_dict = None
     else:
         data_dict = None
     jsonformat = json.dumps(data_dict, sort_keys=False, indent=4)
+    print(f"json:{jsonformat}")
     return jsonformat
 
 def user_info_register():
