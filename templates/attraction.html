@@ -13,24 +13,48 @@
   <script src="../static/js/attraction.js" async></script>
 </head>
 
-<body id="body">
+<body class="body">
   <div class="hideall"></div>
+  <!-- login box -->
   <div class="login-box">
     <div class="login-header"></div>
     <div class="login-title">
       登入會員帳號
       <img src="../static/img/icon_close.svg" alt="" class="login-cancel">
     </div>
-    <input type="text" name="email" placeholder="輸入電子信箱" class="login-email">
-    <input type="password" name="password" placeholder="輸入密碼" class="login-password">
+    <!-- <form id="login-form" method="PATCH" > -->
+      <input type="text" name="email" placeholder="輸入電子信箱" class="login-email">
+      <input type="password" name="password" placeholder="輸入密碼" class="login-password">
+      <!-- <input type="submit" value="登入帳戶" class="login-btn"> -->
+    <!-- </form> -->
     <div class="login-btn">登入帳戶</div>
-    <div class="login-register">還沒有帳戶？點此註冊</div>
+    <div class="login-status"></div>
+    <div class="login-register" >還沒有帳戶？點此註冊</div>
   </div>
+  <!-- register box -->
+  <div class="register-box">
+    <div class="register-header"></div>
+    <div class="register-title">
+      註冊會員帳號
+      <img src="../static/img/icon_close.svg" alt="" class="register-cancel">
+    </div>
+    <form id="register-form" method="POST">
+      <input type="text" name="name" placeholder="輸入姓名" class="register-name" required>
+      <input type="text" name="email" placeholder="輸入電子信箱" class="register-email" required>
+      <input type="password" name="password" placeholder="輸入密碼" class="register-password" required>
+      <!-- <input type="submit" value="註冊新帳戶" class="register-btn"> -->
+    </form>
+    <div class="register-btn">註冊新帳戶</div>
+    <div class="register-status" ></div>
+    <div class="register-login">已經有帳戶了？點此登入</div>
+  </div>
+
   <div class="nav-bar">
     <div class="nav-bar-items">
       <div class="nav-title"><a href="/">台北一日遊</a></div>
       <div class="nav-menu">
         <div class="nav-schedule">預定行程</div>
+        <div class="nav-logout">登出系統</div>
         <div class="nav-login">登入/註冊</div>
       </div>
     </div>

@@ -1,9 +1,7 @@
-from Model.api import get_api_attractions, get_api_attractionId,api_internal_error,api_not_found_error, api_not_allowed_error
-
-from flask import *
-app=Flask(__name__)
-app.config["JSON_AS_ASCII"]=False
-app.config["TEMPLATES_AUTO_RELOAD"]=True
+# from Model.api import get_api_attractions, get_api_attractionId,api_internal_error,api_not_found_error, api_not_allowed_error
+from Controller.api_user import *
+from Controller.api_attraction import *
+from config import app
 
 # Pages
 @app.route("/")
@@ -20,13 +18,15 @@ def thankyou():
 	return render_template("thankyou.html")
 
 
+#使用者API
+@app.route("/api/user", methods = ["GET","POST","PATCH","DELETE"])
+def api_user():
+	return get_api_user(app)
+
 #旅遊景點API
 @app.route("/api/attractions", methods = ["GET"])
 def api_attractions():
-	#get page & keyword variables
-	page = 0 if not request.args.get("page") else int(request.args.get("page"))
-	keyword = "" if not request.args.get("keyword") else request.args.get("keyword")
-	return get_api_attractions(page,keyword)
+	return get_api_attractions()
 
 
 @app.route("/api/attraction/<attractionId>", methods = ["GET"])

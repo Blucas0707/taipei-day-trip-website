@@ -10,156 +10,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     <link rel="icon" href="../static/img/favicon.ico">
     <script src="../static/js/index.js" async></script>
-    <!-- <script type="text/javascript">
-      var next_page = 0;
-      var keyword = "";
-      var need_show_status = true;
-
-      window.addEventListener("scroll", function(){
-        //count scroll down ration > 90% load more next_page
-        var scrollTop = window.pageYOffset;
-        var bodyHeight = document.getElementById("body").getBoundingClientRect().height;
-        var windowHeight = window.screen.height;
-        var totalScroll = scrollTop + windowHeight;
-        //judge load completed
-        while(totalScroll > bodyHeight * 0.9 && next_page!=null && need_show_status == true){
-          need_show_status=false;
-          get_all_data(next_page,keyword);
-        }
-      });
-      //click porduct and redirect to product page
-      function clickProduct(){
-        var items = document.getElementById("view");
-        items.addEventListener("click",function(){
-          location.replace("/attraction.html");
-        });
-      }
-      clickProduct();
-      function search_keyword(){
-        var div_img;
-        while(document.getElementById("view")){
-          document.getElementById("view").remove();
-        }
-        //set default page = 0 & get keyword
-        keyword = document.getElementById("keyword").value;
-        next_page = 0;
-        get_all_data(next_page,keyword);
-      }
-
-      function get_all_data(page,keyword){
-        //if keyword = null
-        if(keyword==null){
-          keyword = "";
-        }
-        var url = "/api/attractions?page="+ next_page + "&keyword=" + keyword;
-        //send AJAX request
-        var req = new XMLHttpRequest();
-        var jsonformat;
-        req.open("get",url);
-        req.setRequestHeader('Content-Type', 'application/json');
-        req.onload = function(){
-          jsonformat = JSON.parse(this.responseText);
-          // console.log(jsonformat);
-          show_data(jsonformat);
-        }
-        req.send();
-      }
-
-      function show_data(jsonformat){
-        var name, mrt, category, image, content;
-
-        //clear nodata screen
-        while(document.getElementById("nodata")){
-          document.getElementById("nodata").remove();
-        }
-
-        if(jsonformat.nextPage==null && next_page == 0){
-          next_page = null;
-          // create new div under img-gallery
-          div = document.createElement('div');
-          div.className = 'nodata';
-          div.id = 'nodata';
-          body = document.getElementById('img-gallery-contain');
-          body.appendChild(div);
-          document.getElementById("nodata").innerHTML = "此次搜尋，沒有結果";
-        }
-        else{
-          next_page = jsonformat.nextPage;
-          var data_len = jsonformat.data.length;
-          for(let i = 0;i<data_len;i++){
-            name = jsonformat.data[i].name;
-            mrt = jsonformat.data[i].mrt;
-            category = jsonformat.data[i].category;
-            image = jsonformat.data[i].images[0];
-
-            // create new div under img-gallery
-  					div = document.createElement('div');
-  					div.className = 'img';
-  					div.id = 'view';
-  					div_img_gallery = document.getElementById('img-gallery-contain');
-  					div_img_gallery.appendChild(div);
-
-            // create new img under new div
-  					img = document.createElement('img');
-  					img.src = image;
-  					div.appendChild(img);
-            // create new div block
-            div_block = document.createElement('div');
-  					div_block.className = "image-block";
-            div.appendChild(div_block);
-            // create new name-div under new div
-  					div_name = document.createElement('div');
-  					div_name.className = "image-name";
-            div_block.appendChild(div_name);
-            content = document.createTextNode(name);
-            div_name.appendChild(content);
-
-            // create new div description under new div
-  					div_description = document.createElement('div');
-  					div_description.className = "image-description";
-            div_block.appendChild(div_description);
-
-            // create new span mrt under new div
-  					span_mrt = document.createElement('span');
-  					span_mrt.className = "image-mrt";
-            div_description.appendChild(span_mrt);
-            content = document.createTextNode(mrt);
-            span_mrt.appendChild(content);
-
-            // create new span category under new div
-  					span_category = document.createElement('span');
-  					span_category.className = "image-category";
-            div_description.appendChild(span_category);
-            content = document.createTextNode(category);
-            span_category.appendChild(content);
-          }
-        }
-      need_show_status = true;
-      }
-
-
-
-
-    </script> -->
   </head>
   <body class="body">
     <div class="hideall"></div>
+    <!-- login box -->
     <div class="login-box">
       <div class="login-header"></div>
       <div class="login-title">
         登入會員帳號
         <img src="../static/img/icon_close.svg" alt="" class="login-cancel">
       </div>
-      <input type="text" name="email" placeholder="輸入電子信箱" class="login-email">
-      <input type="password" name="password" placeholder="輸入密碼" class="login-password">
+      <!-- <form id="login-form" method="PATCH" > -->
+        <input type="text" name="email" placeholder="輸入電子信箱" class="login-email">
+        <input type="password" name="password" placeholder="輸入密碼" class="login-password">
+        <!-- <input type="submit" value="登入帳戶" class="login-btn"> -->
+      <!-- </form> -->
       <div class="login-btn">登入帳戶</div>
-      <div class="login-register">還沒有帳戶？點此註冊</div>
+      <div class="login-status"></div>
+      <div class="login-register" >還沒有帳戶？點此註冊</div>
     </div>
+    <!-- register box -->
+    <div class="register-box">
+      <div class="register-header"></div>
+      <div class="register-title">
+        註冊會員帳號
+        <img src="../static/img/icon_close.svg" alt="" class="register-cancel">
+      </div>
+      <form id="register-form" method="POST">
+        <input type="text" name="name" placeholder="輸入姓名" class="register-name" required>
+        <input type="text" name="email" placeholder="輸入電子信箱" class="register-email" required>
+        <input type="password" name="password" placeholder="輸入密碼" class="register-password" required>
+        <!-- <input type="submit" value="註冊新帳戶" class="register-btn"> -->
+      </form>
+      <div class="register-btn">註冊新帳戶</div>
+      <div class="register-status" ></div>
+      <div class="register-login">已經有帳戶了？點此登入</div>
+    </div>
+
     <div class="nav-bar">
       <div class="nav-bar-items">
         <div class="nav-title"><a href="/">台北一日遊</a></div>
         <div class="nav-menu">
           <div class="nav-schedule">預定行程</div>
+          <div class="nav-logout">登出系統</div>
           <div class="nav-login">登入/註冊</div>
         </div>
       </div>
