@@ -16,7 +16,7 @@ let models = {
     }).then((result)=>{
       this.logoutData = result;
       this.loginData = null;
-      console.log(this.loginData);
+      // console.log(this.loginData);
     })
   },
   checkUserLogin:function(){
@@ -27,7 +27,7 @@ let models = {
     }).then((result)=>{
       this.loginData = result;
       this.logoutData = null;
-      console.log(this.loginData);
+      // console.log(this.loginData);
     });
   },
   validateRegister:function(){
@@ -43,7 +43,7 @@ let models = {
     emailCheck = email.search(emailRule) == 0; //check email format
     nameCheck = name.length >= 4; //check name length >= 4
     passwordCheck = password.length >= 6; //check password >= 6
-    console.log(emailCheck,nameCheck,passwordCheck);
+    // console.log(emailCheck,nameCheck,passwordCheck);
     this.regsiterData = {
       "name":nameCheck,
       "email":emailCheck,
@@ -74,6 +74,24 @@ let models = {
     });
 
   },
+  validateLogin:function(){
+    let email = document.querySelector(".login-email").value;
+    let password = document.querySelector(".login-password").value;
+    // regular rules
+    // var emailRule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+    let emailCheck = true;
+    let passwordCheck = true;
+    emailCheck = email.length > 0; //check email format
+    passwordCheck = password.length > 0; //check password >= 0
+    // console.log(emailCheck,passwordCheck);
+    this.loginData = {
+      "email":emailCheck,
+      "password":passwordCheck
+    };
+
+    return emailCheck&&passwordCheck;
+
+  },
   getuserLogin:function(){
     // let formElement = document.querySelector("#login-form");
     // let email = formElement.email.value;
@@ -84,7 +102,7 @@ let models = {
       "email":email,
       "password":password
     };
-    console.log(email,password);
+    // console.log(email,password);
     return fetch("/api/user",{
       method:'PATCH',
       headers: {"Content-type":"application/json;"},
@@ -95,7 +113,7 @@ let models = {
     }).then((result)=>{
 
       this.loginData = result;
-      console.log(result);
+      // console.log(result);
     });
   },
   getData: function() {
@@ -126,6 +144,13 @@ let views = {
     if(models.loginData != null){ //get session success
       navLogin.style.display = "none";
       navLogout.style.display = "block";
+    }
+  },
+  renderLoginValidation:function(){
+    let loginstatus = document.querySelector(".login-status");
+    loginstatus.style.display = "block";
+    if(models.loginData.name == false || models.loginData.password == false){
+      loginstatus.innerHTML = "帳號或密碼不得為空";
     }
   },
   LoginStatus:function(){
@@ -173,8 +198,6 @@ let views = {
           registerstatus.innerHTML = "密碼必須大於6個字元";
         }
       }
-
-
     }
   },
   showRegister:function(){
@@ -295,7 +318,7 @@ let controller = {
     let register = document.querySelector(".register-btn");
     register.addEventListener("click",()=>{
       let validation = models.validateRegister(); //驗證註冊資料
-      console.log(validation);
+      // console.log(validation);
       if(validation){
         models.getuserRegister().then(()=>{
           views.RegisterStatus();
@@ -308,9 +331,15 @@ let controller = {
   userLogin:function(){
     let login = document.querySelector(".login-btn");
     login.addEventListener("click",()=>{
-      models.getuserLogin().then(()=>{
-        views.LoginStatus();
-      });
+      let validation = models.validateLogin(); //驗證登入資料
+      // console.log(validation);
+      if(validation){
+        models.getuserLogin().then(()=>{
+          views.LoginStatus();
+        });
+      }else{
+        views.renderLoginValidation();
+      }
     });
   },
   cancelLoginRegister:function(){

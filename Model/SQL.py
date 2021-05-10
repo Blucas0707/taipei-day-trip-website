@@ -143,44 +143,41 @@ class SQLDB:
         # user existed
         sql = """select count(*) from taipei_travel_user_info where email = %s limit 1 """
         email = para[1] #email
-        print(f"para,email = {para}, {email}")
         con = self.pool.get_connection()
         cursor = con.cursor()
         cursor.execute(sql,(email,))
         result = cursor.fetchone()
-        print(f"result= {result},{result[0]}")
+
         if result[0] == 0: #user not existed
-            # try:
-            sql = """insert into taipei_travel_user_info (name,email,password)  values (%s,%s,%s)"""
-            cursor.execute(sql, para)
-            con.commit()
-            # close sql connect
-            con.close()
-            return 200
-            # except:
-            #     return 500
+            try:
+                sql = """insert into taipei_travel_user_info (name,email,password)  values (%s,%s,%s)"""
+                cursor.execute(sql, para)
+                con.commit()
+                # close sql connect
+                con.close()
+                return 200
+            except:
+                return 500
         else:
            return 400
 
 
     def user_login(self, para =None):
         # user existed
-        # try:
-        sql = """select count(*) from taipei_travel_user_info where email = %s and password = %s """
-        print(f"para={para}")
-        con = self.pool.get_connection()
-        cursor = con.cursor()
-        cursor.execute(sql, para)
-        result = cursor.fetchone()
-        # close sql connect
-        con.close()
-        print(f"result={result}")
-        if result[0] == 1:  # user info match
-            return 200
-        else:
-            return 400
-        # except:
-        #     return 500
+        try:
+            sql = """select count(*) from taipei_travel_user_info where email = %s and password = %s """
+            con = self.pool.get_connection()
+            cursor = con.cursor()
+            cursor.execute(sql, para)
+            result = cursor.fetchone()
+            # close sql connect
+            con.close()
+            if result[0] == 1:  # user info match
+                return 200
+            else:
+                return 400
+        except:
+            return 500
 
     def checkLogin(self, para =None):
         #check user login
@@ -193,7 +190,6 @@ class SQLDB:
 
         # close sql connect
         con.close()
-        # print(results)
         return results
 
 

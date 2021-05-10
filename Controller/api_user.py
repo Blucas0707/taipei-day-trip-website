@@ -52,13 +52,13 @@ def get_api_user(app):
 
 def get_user_info_login():
     sessions = getSession()
-    print(f"session:{sessions}")
+    # print(f"session:{sessions}")
     if sessions != False:
         # email = sessions[0]
         # password = sessions[1]
         para = sessions #email, password
         results = mysql.checkLogin(para)
-        print(f"results:{results}")
+        # print(f"results:{results}")
         if results != None:
             data_dict = {
                 "data": {
@@ -72,7 +72,7 @@ def get_user_info_login():
     else:
         data_dict = None
     jsonformat = json.dumps(data_dict, sort_keys=False, indent=4)
-    print(f"json:{jsonformat}")
+    # print(f"json:{jsonformat}")
     return jsonformat
 
 def user_info_register():
@@ -89,7 +89,7 @@ def user_info_register():
     else:
         para = (name, email, password)
         success = mysql.user_register(para)
-        print(success)
+        # print(success)
     if success == 200:
         data_dict = {
             "ok": True
@@ -110,7 +110,7 @@ def user_info_login():
     data = request.get_json()
     email = str(data["email"])
     password = passwordEncrypt(str(data["password"]))  # password 加密
-    print("#01" ,email, password)
+    # print("#01" ,email, password)
     if None in [email,password]: #null in input
         data_dict = {
             "error": True,
@@ -135,7 +135,7 @@ def user_info_login():
         return api_internal_error()
 
     jsonformat = json.dumps(data_dict, sort_keys=False, indent=4)
-    print(success, jsonformat)
+    # print(success, jsonformat)
     return jsonformat
 
 def user_info_logout():
