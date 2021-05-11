@@ -275,7 +275,7 @@ let views={
     //judge load completed
     if(totalScroll > bodyHeight * 0.95 && models.nextPage!=null && need_scrolldown){
       need_scrolldown = false;
-      models.getProductData().then(views.renderData);
+      models.getProductData().then(()=>{views.renderData(););
       need_scrolldown = true;
     }
   },
