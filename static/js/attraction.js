@@ -140,10 +140,13 @@ let views = {
   },
   renderLogin:function(){
     let navLogin = document.querySelector(".nav-login");
-    let navLogout = document.querySelector(".nav-logout");
+    // let navLogout = document.querySelector(".nav-logout");
     if(models.loginData != null){ //get session success
-      navLogin.style.display = "none";
-      navLogout.style.display = "block";
+      // navLogin.style.display = "none";
+      // navLogout.style.display = "block";
+      navLogin.innerHTML = "登出系統";
+    }else{
+      navLogin.innerHTML = "註冊/登入";
     }
   },
   renderLoginValidation:function(){
@@ -212,19 +215,27 @@ let views = {
     loginStatus.style.display = "none";
   },
   showLogin:function(){
-    let hideall = document.querySelector(".hideall");
-    hideall.style.display="block";  //顯示隱藏層
-    hideall.style.height=document.body.clientHeight+"px";  //設定隱藏層的高度為當前頁面高度   px是字尾
+    let login = document.querySelector(".nav-login");
+    if(login.innerHTML == "註冊/登入"){
+      let hideall = document.querySelector(".hideall");
+      hideall.style.display="block";  //顯示隱藏層
+      hideall.style.height=document.body.clientHeight+"px";  //設定隱藏層的高度為當前頁面高度   px是字尾
 
-    let loginBox = document.querySelector(".login-box");
-    loginBox.style.display = "block"; //顯示彈出層
-    let registerBox = document.querySelector(".register-box");
-    registerBox.style.display = "none"; //隱藏 registerBox
+      let loginBox = document.querySelector(".login-box");
+      loginBox.style.display = "block"; //顯示彈出層
+      let registerBox = document.querySelector(".register-box");
+      registerBox.style.display = "none"; //隱藏 registerBox
 
-    let registerStatus = document.querySelector(".register-status"); //clear login/register status
-    let loginStatus = document.querySelector(".login-status");
-    registerStatus.style.display = "none";
-    loginStatus.style.display = "none";
+      let registerStatus = document.querySelector(".register-status"); //clear login/register status
+      let loginStatus = document.querySelector(".login-status");
+      registerStatus.style.display = "none";
+      loginStatus.style.display = "none";
+    }else{
+      login.style.display = "block";
+      login.innerHTML = "註冊/登入";
+      models.checkUserLogout(); //logout & delete session
+    }
+
   },
   cancelLogin:function(){
     let hideall = document.querySelector(".hideall");
@@ -295,20 +306,12 @@ let views = {
     // check login & logout
     controller.userRegister(); // user register btn
     controller.userLogin(); // user login btn
-    controller.checkLogout();
+    // controller.checkLogout();
   },
 
 };
 //controller
 let controller = {
-  checkLogout:function(){
-    let logout = document.querySelector(".nav-logout");
-    logout.addEventListener("click",()=>{
-      models.checkUserLogout().then(()=>{
-        views.renderLogout();
-      });
-    });
-  },
   checkLogin:function(){
     models.checkUserLogin().then(()=>{
       views.renderLogin();

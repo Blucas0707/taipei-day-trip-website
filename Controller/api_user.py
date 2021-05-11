@@ -38,7 +38,6 @@ def api_not_allowed_error():
 
 
 #USER
-
 def get_api_user(app):
     print(request.method)
     if request.method == "GET":

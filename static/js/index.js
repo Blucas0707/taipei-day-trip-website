@@ -2,6 +2,9 @@
     MVC (Model-View-Controller)
     資料處理 - 畫面處理 - 控制流程
 */
+import * as User from './user.js';
+console.log(User.test);
+
 //models
 let models={
   data: null,
@@ -157,10 +160,13 @@ let views={
   },
   renderLogin:function(){
     let navLogin = document.querySelector(".nav-login");
-    let navLogout = document.querySelector(".nav-logout");
+    // let navLogout = document.querySelector(".nav-logout");
     if(models.loginData != null){ //get session success
-      navLogin.style.display = "none";
-      navLogout.style.display = "block";
+      // navLogin.style.display = "none";
+      // navLogout.style.display = "block";
+      navLogin.innerHTML = "登出系統";
+    }else{
+      navLogin.innerHTML = "註冊/登入";
     }
   },
   renderLoginValidation:function(){
@@ -229,19 +235,27 @@ let views={
     loginStatus.style.display = "none";
   },
   showLogin:function(){
-    let hideall = document.querySelector(".hideall");
-    hideall.style.display="block";  //顯示隱藏層
-    hideall.style.height=document.body.clientHeight+"px";  //設定隱藏層的高度為當前頁面高度   px是字尾
+    let login = document.querySelector(".nav-login");
+    if(login.innerHTML == "註冊/登入"){
+      let hideall = document.querySelector(".hideall");
+      hideall.style.display="block";  //顯示隱藏層
+      hideall.style.height=document.body.clientHeight+"px";  //設定隱藏層的高度為當前頁面高度   px是字尾
 
-    let loginBox = document.querySelector(".login-box");
-    loginBox.style.display = "block"; //顯示彈出層
-    let registerBox = document.querySelector(".register-box");
-    registerBox.style.display = "none"; //隱藏 registerBox
+      let loginBox = document.querySelector(".login-box");
+      loginBox.style.display = "block"; //顯示彈出層
+      let registerBox = document.querySelector(".register-box");
+      registerBox.style.display = "none"; //隱藏 registerBox
 
-    let registerStatus = document.querySelector(".register-status"); //clear login/register status
-    let loginStatus = document.querySelector(".login-status");
-    registerStatus.style.display = "none";
-    loginStatus.style.display = "none";
+      let registerStatus = document.querySelector(".register-status"); //clear login/register status
+      let loginStatus = document.querySelector(".login-status");
+      registerStatus.style.display = "none";
+      loginStatus.style.display = "none";
+    }else{
+      login.style.display = "block";
+      login.innerHTML = "註冊/登入";
+      models.checkUserLogout(); //logout & delete session
+    }
+
   },
   cancelLogin:function(){
     let hideall = document.querySelector(".hideall");
@@ -279,44 +293,44 @@ let views={
         image = models.data.data[index].images[0];
 
         // create new div under img-gallery
-        div = document.createElement('div');
+        let div = document.createElement('div');
         div.className = 'img';
         div.id = 'view';
         div.id = id;
-        div_img_gallery = document.querySelector('#img-gallery-contain');
+        let div_img_gallery = document.querySelector('#img-gallery-contain');
         div_img_gallery.appendChild(div);
 
         // create new img under new div
-        img = document.createElement('img');
+        let img = document.createElement('img');
         img.src = image;
         div.appendChild(img);
 
         // create new div block
-        div_block = document.createElement('div');
+        let div_block = document.createElement('div');
         div_block.className = "image-block";
         div.appendChild(div_block);
 
         // create new name-div under new div
-        div_name = document.createElement('div');
+        let div_name = document.createElement('div');
         div_name.className = "image-name";
         div_block.appendChild(div_name);
-        content = document.createTextNode(name);
+        let content = document.createTextNode(name);
         div_name.appendChild(content);
 
         // create new div description under new div
-        div_description = document.createElement('div');
+         let div_description = document.createElement('div');
         div_description.className = "image-description";
         div_block.appendChild(div_description);
 
         // create new span mrt under new div
-        span_mrt = document.createElement('span');
+        let span_mrt = document.createElement('span');
         span_mrt.className = "image-mrt";
         div_description.appendChild(span_mrt);
         content = document.createTextNode(mrt);
         span_mrt.appendChild(content);
 
         // create new span category under new div
-        span_category = document.createElement('span');
+        let span_category = document.createElement('span');
         span_category.className = "image-category";
         div_description.appendChild(span_category);
         content = document.createTextNode(category);
@@ -345,21 +359,21 @@ let views={
     // check login & logout
     controller.userRegister(); // user register btn
     controller.userLogin(); // user login btn
-    controller.checkLogout();
+    // controller.checkLogout();
 
   }
 
 };
 //controllers
 let controller={
-  checkLogout:function(){
-    let logout = document.querySelector(".nav-logout");
-    logout.addEventListener("click",()=>{
-      models.checkUserLogout().then(()=>{
-        views.renderLogout();
-      });
-    });
-  },
+  // checkLogout:function(){
+  //   let logout = document.querySelector(".nav-logout");
+  //   logout.addEventListener("click",()=>{
+  //     models.checkUserLogout().then(()=>{
+  //       views.renderLogout();
+  //     });
+  //   });
+  // },
   checkLogin:function(){
     models.checkUserLogin().then(()=>{
       views.renderLogin();

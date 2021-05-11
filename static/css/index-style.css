@@ -187,7 +187,7 @@ a,a:link,a:visited {
   cursor: pointer;
 }
 
-.nav-logout {
+/* .nav-logout {
   display: none;
   height: 14px;
   margin: 10px 0;
@@ -197,7 +197,7 @@ a,a:link,a:visited {
   font-size: 16px;
   line-height: 13px;
   color: #666666;
-}
+} */
 
 .cover {
   padding-top:54px;
