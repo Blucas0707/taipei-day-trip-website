@@ -14,7 +14,7 @@ class SQLDB:
             "password":config["SQL_PASSWORD"],
             "auth_plugin":"mysql_native_password"
         }
-        self.pool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "mypool",pool_size = 32,pool_reset_session=True,**self.config)
+        self.pool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "mypool",pool_size = 8,pool_reset_session=True,**self.config)
         # self.conn = self.pool.get_connection()
         print("POOL連線成功")
 
