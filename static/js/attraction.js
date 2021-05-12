@@ -299,14 +299,6 @@ let views = {
     // choose package;
     controller.choosePackage();
     controller.clickImage();
-
-    //login/register or cancel
-    controller.loginRegister();
-    controller.cancelLoginRegister();
-    // check login & logout
-    controller.userRegister(); // user register btn
-    controller.userLogin(); // user login btn
-    // controller.checkLogout();
   },
 
 };
@@ -408,4 +400,12 @@ let controller = {
     });
   }
 }
+
 controller.init();
+//login/register or cancel
+controller.loginRegister();
+controller.cancelLoginRegister();
+// check login & logout
+controller.userRegister(); // user register btn
+controller.userLogin(); // user login btn
+// controller.checkLogout();

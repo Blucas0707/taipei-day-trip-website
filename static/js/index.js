@@ -143,6 +143,8 @@ let models={
 };
 //views
 let views={
+  need_scrolldown:null,
+
   clear:function(){
     let img = document.querySelector(".image-gallery");
     while (img.firstChild) {
@@ -266,17 +268,19 @@ let views={
     registerBox.style.display="none";  //隱藏register box
   },
   scrolldown:function(){
-    let need_scrolldown = true;
+    this.need_scrolldown = true;
     //count scroll down ration > 90% load more next_page
     var scrollTop = window.pageYOffset;
     var bodyHeight = document.querySelector(".body").getBoundingClientRect().height;
     var windowHeight = window.screen.height;
     var totalScroll = scrollTop + windowHeight;
     //judge load completed
-    if(totalScroll > bodyHeight * 0.95 && models.nextPage!=null && need_scrolldown){
-      need_scrolldown = false;
-      models.getProductData().then(()=>{views.renderData(););
-      need_scrolldown = true;
+    if(totalScroll > bodyHeight * 0.95 && models.nextPage!=null && this.need_scrolldown){
+      console.log("scrolldown activate");
+      this.need_scrolldown = false;
+      models.getProductData().then(()=>{
+        views.renderData()
+      });
     }
   },
   renderData:function(){
@@ -337,43 +341,20 @@ let views={
         span_category.appendChild(content);
       }
     }
-    else if(models.nextPage==null && document.querySelector(".img") == null){
-      div = document.createElement('div');
+    else if(models.nextPage==null && document.querySelector(".image-gallery").firstChild==null){
+      let div = document.createElement('div');
       div.className = 'nodata';
-      body = document.querySelector('#img-gallery-contain');
+      let body = document.querySelector('#img-gallery-contain');
       body.appendChild(div);
       document.querySelector(".nodata").innerHTML = "此次搜尋，沒有結果";
     }
-
-    //scroll down
-    window.addEventListener("scroll", this.scrolldown);
-
-    // get keywordSearch
-    let btn_keyword = document.querySelector(".keyin_Keyword");
-    btn_keyword.addEventListener("click",controller.keywordSearch);
     //click img
     controller.imgClick();
-    //login/register or cancel
-    controller.loginRegister();
-    controller.cancelLoginRegister();
-    // check login & logout
-    controller.userRegister(); // user register btn
-    controller.userLogin(); // user login btn
-    // controller.checkLogout();
-
   }
 
 };
 //controllers
 let controller={
-  // checkLogout:function(){
-  //   let logout = document.querySelector(".nav-logout");
-  //   logout.addEventListener("click",()=>{
-  //     models.checkUserLogout().then(()=>{
-  //       views.renderLogout();
-  //     });
-  //   });
-  // },
   checkLogin:function(){
     models.checkUserLogin().then(()=>{
       views.renderLogin();
@@ -428,7 +409,7 @@ let controller={
     backtologin.addEventListener("click",views.showLogin);
   },
   imgClick:function(){
-    let imgs = document.querySelectorAll("div.img");
+    let imgs = document.querySelectorAll(".img");
     for(let i = 0;i<imgs.length;i++){
       let url = "/attraction/" + imgs[i].id;
       imgs[i].addEventListener("click", function(e){
@@ -437,10 +418,14 @@ let controller={
     }
   },
   keywordSearch:function(){
-    //clear
-    views.clear();
-    models.getkeywordsearch().then(()=>{
-      views.renderData();
+    // get keywordSearch
+    let btn_keyword = document.querySelector(".keyin_Keyword");
+    btn_keyword.addEventListener("click",()=>{
+      //clear
+      views.clear();
+      models.getkeywordsearch().then(()=>{
+        views.renderData();
+      });
     });
   },
   init:function(){
@@ -452,3 +437,15 @@ let controller={
 };
 
 controller.init();
+//keyword search
+controller.keywordSearch();
+//scroll down
+window.addEventListener("scroll", views.scrolldown);
+views.need_scrolldown = true;
+//login/register or cancel
+controller.loginRegister();
+controller.cancelLoginRegister();
+// check login & logout
+controller.userRegister(); // user register btn
+controller.userLogin(); // user login btn
+// controller.checkLogout();
