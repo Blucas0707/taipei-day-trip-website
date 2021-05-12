@@ -2,9 +2,6 @@
     MVC (Model-View-Controller)
     資料處理 - 畫面處理 - 控制流程
 */
-import * as User from './user.js';
-console.log(User.test);
-
 //models
 let models={
   data: null,
@@ -137,14 +134,14 @@ let models={
       return response.json();
     }).then((result) => {
       this.data = result;
+      // console.log(this.nextPage);
       // console.log(this.data);
     });
   }
 };
 //views
 let views={
-  need_scrolldown:null,
-
+  need_scrolldown:true,
   clear:function(){
     let img = document.querySelector(".image-gallery");
     while (img.firstChild) {
@@ -268,18 +265,20 @@ let views={
     registerBox.style.display="none";  //隱藏register box
   },
   scrolldown:function(){
-    this.need_scrolldown = true;
+    // console.log(views.need_scrolldown);
     //count scroll down ration > 90% load more next_page
     var scrollTop = window.pageYOffset;
     var bodyHeight = document.querySelector(".body").getBoundingClientRect().height;
     var windowHeight = window.screen.height;
     var totalScroll = scrollTop + windowHeight;
     //judge load completed
-    if(totalScroll > bodyHeight * 0.95 && models.nextPage!=null && this.need_scrolldown){
-      console.log("scrolldown activate");
-      this.need_scrolldown = false;
+    if(totalScroll > bodyHeight * 0.95 && models.nextPage!=null && views.need_scrolldown){
+      // console.log("scrolldown activate");
+      views.need_scrolldown = false;
       models.getProductData().then(()=>{
         views.renderData()
+      }).then(()=>{
+        views.need_scrolldown = true;
       });
     }
   },
@@ -350,6 +349,10 @@ let views={
     }
     //click img
     controller.imgClick();
+    //keyword search
+    controller.keywordSearch();
+    //scroll down
+    controller.scrolldown();
   }
 
 };
@@ -428,24 +431,24 @@ let controller={
       });
     });
   },
+  scrolldown:function(){
+    window.addEventListener("scroll",views.scrolldown);
+  },
   init:function(){
     this.checkLogin();//check login session
     models.getProductData().then(()=>{ //get product pic
       views.renderData();
+      //login/register or cancel
+      controller.loginRegister();
+      controller.cancelLoginRegister();
+      // check login & logout
+      controller.userRegister(); // user register btn
+      controller.userLogin(); // user login btn
     });
   }
 };
 
 controller.init();
-//keyword search
-controller.keywordSearch();
-//scroll down
-window.addEventListener("scroll", views.scrolldown);
-views.need_scrolldown = true;
-//login/register or cancel
-controller.loginRegister();
-controller.cancelLoginRegister();
-// check login & logout
-controller.userRegister(); // user register btn
-controller.userLogin(); // user login btn
+
+
 // controller.checkLogout();

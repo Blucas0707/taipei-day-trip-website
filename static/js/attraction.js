@@ -128,6 +128,7 @@ let models = {
 };
 //views
 let views = {
+  need_scrolldown:true,
   images:null,
   imageIndex:0,
   renderLogout:function(){
@@ -397,15 +398,14 @@ let controller = {
     this.checkLogin();//check login session
     models.getData().then(()=>{ //get product pic
       views.renderData();
+      //login/register or cancel
+      controller.loginRegister();
+      controller.cancelLoginRegister();
+      // check login & logout
+      controller.userRegister(); // user register btn
+      controller.userLogin(); // user login btn
     });
   }
 }
 
 controller.init();
-//login/register or cancel
-controller.loginRegister();
-controller.cancelLoginRegister();
-// check login & logout
-controller.userRegister(); // user register btn
-controller.userLogin(); // user login btn
-// controller.checkLogout();
