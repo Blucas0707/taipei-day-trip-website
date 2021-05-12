@@ -8,7 +8,7 @@ a,a:link,a:visited {
   text-decoration: none;
 }
 
-/* login */
+
 .hideall {
   display: none;
   position: fixed;
@@ -19,23 +19,27 @@ a,a:link,a:visited {
   opacity: 0.25;
   z-index: 3;
 }
-.login-box {
+
+/* login & register*/
+.login-box, .register-box {
   display: none;
   position: fixed;
   top:80px;
   left: calc(50% - 170px);
   width:340px;
-  height:275px;
+  /* height:275px; */
   background-color: white;
   z-index: 4;
 }
-
-.login-header {
+.register-box {
+  /* height:332px; */
+}
+.login-header, .register-header {
   height:10px;
   background: linear-gradient(to top left, #6baebf, #a1d7e8);
 }
 
-.login-title {
+.login-title, .register-title {
   position: relative;
   margin:15px;
   text-align: center;
@@ -47,17 +51,17 @@ a,a:link,a:visited {
   color: #666666;
 }
 
-.login-cancel {
+.login-cancel, .register-cancel {
   position: absolute;
   top: 0;
   right: 17px;
   width: 16px;
   height: 16px;
 }
-.login-cancel:hover {
+.login-cancel:hover , .register-cancel:hover {
   cursor: pointer;
 }
-.login-email, .login-password {
+.login-email, .login-password,.register-name, .register-email, .register-password  {
   margin:0 15px 10px;
   border: 1px solid #CCCCCC;
   box-sizing: border-box;
@@ -73,7 +77,7 @@ a,a:link,a:visited {
   padding-left:15px;
 }
 
-.login-btn {
+.login-btn, .register-btn {
   display: flex;
   width: 310px;
   height: 47px;
@@ -88,12 +92,25 @@ a,a:link,a:visited {
   color: #FFFFFF;
   justify-content: center;
   align-items: center;
+  border: none;
 }
-.login-btn:hover {
+.login-btn:hover, .register-btn:hover {
   cursor: pointer;
 }
-
-.login-register {
+.login-status, .register-status {
+  display:none;
+  text-align: center;
+  width: 310px;
+  height: 22px;
+  margin:0 15px 15px;
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 13px;
+  color: #666666;
+}
+.login-register, .register-login {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -107,7 +124,7 @@ a,a:link,a:visited {
   line-height: 13px;
   color: #666666;
 }
-.login-register:hover {
+.login-register:hover, .register-login:hover {
   cursor: pointer;
 }
 
@@ -116,8 +133,8 @@ a,a:link,a:visited {
   width: 100%;
   position: fixed;
   background-color: white;
-  border-bottom: 1px solid #E8E8E8;
   z-index: 2;
+  border-bottom: 1px solid #E8E8E8;
 }
 
 .nav-bar-items {
@@ -125,7 +142,7 @@ a,a:link,a:visited {
   height: 54px;
   align-items: center;
   max-width: 1200px;
-  margin: auto;
+  margin: auto 18%;
 }
 
 .nav-title {
@@ -139,7 +156,10 @@ a,a:link,a:visited {
   font-size: 30px;
   line-height: 34px;
 }
-
+a,a:link,a:visited {
+  color: #438899;
+  text-decoration: none;
+}
 .nav-menu {
   flex: auto;
   display: flex;
@@ -169,9 +189,22 @@ a,a:link,a:visited {
   color: #666666;
 }
 
-.nav-login:hover{
+.nav-login:hover, .nav-logout:hover{
   cursor: pointer;
 }
+
+/* .nav-logout {
+  display: none;
+  height: 14px;
+  margin: 10px 0;
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 13px;
+  color: #666666;
+} */
+
 
 main {
   padding-top: 54px;
@@ -202,24 +235,6 @@ img {
   border-radius: 5px;
 }
 
-/* CSS 做出圓形點擊
-.img-left, .img-right{
-  display:flex;
-  position:absolute;
-  top:203px;
-  width:36px;
-  height:36px;
-  align-items:center;
-  justify-content:center;
-
-  border-radius: 100rem;
-
-  background-color: white;
-  opacity: 0.3;
-}
-.img-right {
-  right:0;
-} */
 .img-left, .img-right {
   width: 36px;
   height: 36px;
@@ -309,7 +324,7 @@ img {
   line-height: 13px;
   color: #666666;
   height: 22px;
-  width: 560px;
+  /* width: 560px; */
   padding: 15px 20px 24px 20px;
 }
 
@@ -417,7 +432,7 @@ input[type='radio']:checked:after {
   font-size: 16px;
   line-height: 32px;
   color: #666666;
-  margin-right: 10px;
+  margin-right: 20px;
   margin-left: 20px;
 }
 
@@ -429,7 +444,7 @@ input[type='radio']:checked:after {
   line-height: 13px;
   color: #666666;
   max-width: 1180px;
-  width: 100%;
+  /* width: 100%; */
   height: 32px;
   margin-top: 20px;
   margin-right: 10px;
@@ -472,12 +487,6 @@ footer {
 }
 
 @media (max-width: 600px) {
-  .nav-bar {
-    position: fixed;
-    background-color: white;
-    border-bottom: 1px solid #E8E8E8;
-    z-index: 2;
-  }
 
   .nav-bar-items {
     margin: auto 20px;

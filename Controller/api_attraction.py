@@ -1,10 +1,14 @@
 from Model.SQL import SQLDB
 import json
+from flask import *
 
 #set mysql
 mysql = SQLDB()
 
-def get_api_attractions(page,keyword):
+def get_api_attractions():
+    # get page & keyword variables
+    page = 0 if not request.args.get("page") else int(request.args.get("page"))
+    keyword = "" if not request.args.get("keyword") else request.args.get("keyword")
     # 防止特殊符號 & SQL injection
     abandom_list = ['"', "'", "%", ";", "="]
     # print(page,keyword)
@@ -53,3 +57,5 @@ def api_not_allowed_error():
     }
     jsonformat = json.dumps(data_dict, sort_keys=False, indent=4)
     return jsonformat
+
+
