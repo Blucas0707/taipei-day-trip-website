@@ -17,6 +17,9 @@ class SQLDB:
         self.pool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "mypool",pool_size = 8,pool_reset_session=True,**self.config)
         # self.conn = self.pool.get_connection()
         print("POOL連線成功")
+    def close(self,cursor ,con):
+        cursor.close()
+        con.close()
 
     # def Update(self, para= None):
     #     sql = "REPLACE INTO taipei_travel_info (id, name, category, description, address, transport, mrt, latitude, longitude) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')"
@@ -80,7 +83,8 @@ class SQLDB:
                     image_links.append(result[0])
                 data_dict["data"]["images"] = image_links
                 #close sql connect
-                con.close()
+                self.close(cursor,con)
+
         except:
             data_dict = {
                 "error": True,
@@ -134,7 +138,7 @@ class SQLDB:
                 new_dict["images"] = image_links
                 data_dict["data"].append(new_dict)
         # close sql connect
-        con.close()
+        self.close(cursor, con)
         return data_dict
 
     #USER
@@ -153,7 +157,7 @@ class SQLDB:
                 cursor.execute(sql, para)
                 con.commit()
                 # close sql connect
-                con.close()
+                self.close(cursor, con)
                 return 200
             except:
                 return 500
@@ -170,7 +174,7 @@ class SQLDB:
             cursor.execute(sql, para)
             result = cursor.fetchone()
             # close sql connect
-            con.close()
+            self.close(cursor, con)
             if result[0] == 1:  # user info match
                 return 200
             else:
@@ -188,7 +192,7 @@ class SQLDB:
         results = cursor.fetchone()
 
         # close sql connect
-        con.close()
+        self.close(cursor, con)
         return results
 
 
