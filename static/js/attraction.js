@@ -1,4 +1,5 @@
 /*
+/*
     MVC (Model-View-Controller)
     資料處理 - 畫面處理 - 控制流程
   */
@@ -155,6 +156,7 @@ let views = {
     loginstatus.style.display = "block";
     if(models.loginData.name == false || models.loginData.password == false){
       loginstatus.innerHTML = "帳號或密碼不得為空";
+      loginstatus.style.color = "red";
     }
   },
   LoginStatus:function(){
@@ -163,9 +165,11 @@ let views = {
     if(models.loginData != null){
       if(models.loginData.error == true ){
         loginstatus.innerHTML = "登入失敗，帳號或密碼錯誤";
+        loginstatus.style.color = "red";//Fail變色
       }
       else{
         loginstatus.innerHTML = "登入成功";
+        loginstatus.style.color = "blue";
         window.location.reload(); // reload
       }
     }
@@ -173,6 +177,7 @@ let views = {
   renderRegisterValidation:function(){
     let registerstatus = document.querySelector(".register-status");
     registerstatus.style.display = "block";
+    registerstatus.style.color = "red";
     if(models.regsiterData.name == false){
       registerstatus.innerHTML = "姓名長度必須大於4";
     }
@@ -183,17 +188,29 @@ let views = {
       registerstatus.innerHTML = "密碼長度亦須大於6";
     }
   },
+  resetRegisterInput:function(){ //清空註冊表
+    let name = document.querySelector(".register-name");
+    let email = document.querySelector(".register-email");
+    let password = document.querySelector(".register-password");
+    name.value = "";
+    email.value ="";
+    password.value="";
+  },
   RegisterStatus:function(){
     let registerstatus = document.querySelector(".register-status");
     registerstatus.style.display = "block";
     if(models.regsiterData.error == true){
       registerstatus.innerHTML = "註冊失敗，電子信箱已被註冊";
+      registerstatus.style.color = "red";
     }
     else{
       if(models.regsiterData.ok == true){
         registerstatus.innerHTML = "註冊成功，請重新登入";
+        registerstatus.style.color = "blue";//提示色
+        views.resetRegisterInput();
       }
       else{
+        registerstatus.style.color = "red";
         if(models.regsiterData.name == false){
           registerstatus.innerHTML = "姓名必須大於4個字元";
         }else if (models.regsiterData.email == false) {
@@ -394,16 +411,25 @@ let controller = {
     });
 
   },
+  booking:function(){
+    let booking_btn = document.querySelector(".booking-confirm");
+    booking_btn.addEventListener("click",()=>{
+      let url = "/booking";
+      window.location.replace(url);
+    });
+  },
   init:function(){
     this.checkLogin();//check login session
     models.getData().then(()=>{ //get product pic
       views.renderData();
       //login/register or cancel
-      controller.loginRegister();
-      controller.cancelLoginRegister();
+      this.loginRegister();
+      this.cancelLoginRegister();
       // check login & logout
-      controller.userRegister(); // user register btn
-      controller.userLogin(); // user login btn
+      this.userRegister(); // user register btn
+      this.userLogin(); // user login btn
+      //booking
+      this.booking();
     });
   }
 }

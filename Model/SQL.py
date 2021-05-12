@@ -195,6 +195,19 @@ class SQLDB:
         self.close(cursor, con)
         return results
 
+    #Booking
+    def establish_booking(self, para =None):
+        try:
+            sql = """insert into taipei_travel_booking (email,attractionId,date,time,price)  values (%s,%s,%s,%s,%s)"""
+            con = self.pool.get_connection()
+            cursor = con.cursor()
+            cursor.execute(sql, para)
+            con.commit()
+            # close sql connect
+            self.close(cursor, con)
+            return 200
+        except:
+            return 500
 
 
 

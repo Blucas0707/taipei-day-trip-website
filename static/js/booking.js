@@ -1,12 +1,10 @@
 /*
     MVC (Model-View-Controller)
     資料處理 - 畫面處理 - 控制流程
-*/
+  */
 //models
-let models={
+let models = {
   data: null,
-  nextPage:0,
-  keyword:"",
   loginData:null,
   logoutData:null,
   regsiterData:null,
@@ -118,37 +116,21 @@ let models={
       // console.log(result);
     });
   },
-  getkeywordsearch:function(){
-    this.keyword = document.querySelector("#keyword").value;
-    let url = "/api/attractions" + "?page=" + this.nextPage + "&keyword=" + this.keyword;
+  getData: function() {
+    let url = "/api/" + location.pathname;
     return fetch(url).then((response) => {
       return response.json();
     }).then((result) => {
-      this.data = result;
-      // console.log(this.data);
-    });
-  },
-  getProductData:function(){
-    let url = "/api/attractions" + "?page=" + this.nextPage + "&keyword=" + this.keyword;
-    return fetch(url).then((response) => {
-      return response.json();
-    }).then((result) => {
-      this.data = result;
-      // console.log(this.nextPage);
+      this.data = result.data;
       // console.log(this.data);
     });
   }
 };
 //views
-let views={
+let views = {
   need_scrolldown:true,
-  clear:function(){
-    let img = document.querySelector(".image-gallery");
-    while (img.firstChild) {
-      img.removeChild(img.firstChild);
-    }
-    models.nextPage = 0;
-  },
+  images:null,
+  imageIndex:0,
   renderLogout:function(){
     let navLogin = document.querySelector(".nav-login");
     let navLogout = document.querySelector(".nav-logout");
@@ -173,7 +155,6 @@ let views={
     loginstatus.style.display = "block";
     if(models.loginData.name == false || models.loginData.password == false){
       loginstatus.innerHTML = "帳號或密碼不得為空";
-      loginstatus.style.color = "red";
     }
   },
   LoginStatus:function(){
@@ -182,11 +163,9 @@ let views={
     if(models.loginData != null){
       if(models.loginData.error == true ){
         loginstatus.innerHTML = "登入失敗，帳號或密碼錯誤";
-        loginstatus.style.color = "red";
       }
       else{
         loginstatus.innerHTML = "登入成功";
-        loginstatus.style.color = "blue";
         window.location.reload(); // reload
       }
     }
@@ -194,7 +173,6 @@ let views={
   renderRegisterValidation:function(){
     let registerstatus = document.querySelector(".register-status");
     registerstatus.style.display = "block";
-    registerstatus.style.color = "red";
     if(models.regsiterData.name == false){
       registerstatus.innerHTML = "姓名長度必須大於4";
     }
@@ -205,29 +183,17 @@ let views={
       registerstatus.innerHTML = "密碼長度亦須大於6";
     }
   },
-  resetRegisterInput:function(){ //清空註冊表
-    let name = document.querySelector(".register-name");
-    let email = document.querySelector(".register-email");
-    let password = document.querySelector(".register-password");
-    name.value = "";
-    email.value ="";
-    password.value="";
-  },
   RegisterStatus:function(){
     let registerstatus = document.querySelector(".register-status");
     registerstatus.style.display = "block";
     if(models.regsiterData.error == true){
       registerstatus.innerHTML = "註冊失敗，電子信箱已被註冊";
-      registerstatus.style.color = "red";
     }
     else{
       if(models.regsiterData.ok == true){
         registerstatus.innerHTML = "註冊成功，請重新登入";
-        registerstatus.style.color = "blue";
-        views.resetRegisterInput();
       }
       else{
-        registerstatus.style.color = "red";
         if(models.regsiterData.name == false){
           registerstatus.innerHTML = "姓名必須大於4個字元";
         }else if (models.regsiterData.email == false) {
@@ -280,100 +246,65 @@ let views={
     let registerBox = document.querySelector(".register-box");
     registerBox.style.display="none";  //隱藏register box
   },
-  scrolldown:function(){
-    // console.log(views.need_scrolldown);
-    //count scroll down ration > 90% load more next_page
-    var scrollTop = window.pageYOffset;
-    var bodyHeight = document.querySelector(".body").getBoundingClientRect().height;
-    var windowHeight = window.screen.height;
-    var totalScroll = scrollTop + windowHeight;
-    //judge load completed
-    if(totalScroll > bodyHeight * 0.95 && models.nextPage!=null && views.need_scrolldown){
-      // console.log("scrolldown activate");
-      views.need_scrolldown = false;
-      models.getProductData().then(()=>{
-        views.renderData()
-      }).then(()=>{
-        views.need_scrolldown = true;
-      });
+  renderImageorder:function(){
+    //remove all child first
+    div = document.querySelector(".img-order");
+    while (div.firstChild) {
+      div.removeChild(div.firstChild);
     }
-  },
-  renderData:function(){
-    let id, name, mrt, category, image,nextPage, dataLength;
-    models.nextPage = models.data.nextPage;
-    //no data
-    if(models.nextPage!=null){
-      dataLength = models.data.data.length;
-      for(let index = 0;index<dataLength;index++){
-        id = models.data.data[index].id;
-        name = models.data.data[index].name;
-        mrt = models.data.data[index].mrt;
-        category = models.data.data[index].category;
-        image = models.data.data[index].images[0];
-
-        // create new div under img-gallery
-        let div = document.createElement('div');
-        div.className = 'img';
-        div.id = 'view';
-        div.id = id;
-        let div_img_gallery = document.querySelector('#img-gallery-contain');
-        div_img_gallery.appendChild(div);
-
-        // create new img under new div
-        let img = document.createElement('img');
-        img.src = image;
-        div.appendChild(img);
-
-        // create new div block
-        let div_block = document.createElement('div');
-        div_block.className = "image-block";
-        div.appendChild(div_block);
-
-        // create new name-div under new div
-        let div_name = document.createElement('div');
-        div_name.className = "image-name";
-        div_block.appendChild(div_name);
-        let content = document.createTextNode(name);
-        div_name.appendChild(content);
-
-        // create new div description under new div
-         let div_description = document.createElement('div');
-        div_description.className = "image-description";
-        div_block.appendChild(div_description);
-
-        // create new span mrt under new div
-        let span_mrt = document.createElement('span');
-        span_mrt.className = "image-mrt";
-        div_description.appendChild(span_mrt);
-        content = document.createTextNode(mrt);
-        span_mrt.appendChild(content);
-
-        // create new span category under new div
-        let span_category = document.createElement('span');
-        span_category.className = "image-category";
-        div_description.appendChild(span_category);
-        content = document.createTextNode(category);
-        span_category.appendChild(content);
+    //add new child for img order dot
+    for(let order = 0 ; order < this.images.length; order++){
+      const li = document.createElement("li");
+      if(order == this.imageIndex){
+        li.className = "img-order-pick";
       }
-    }
-    else if(models.nextPage==null && document.querySelector(".image-gallery").firstChild==null){
-      let div = document.createElement('div');
-      div.className = 'nodata';
-      let body = document.querySelector('#img-gallery-contain');
-      body.appendChild(div);
-      document.querySelector(".nodata").innerHTML = "此次搜尋，沒有結果";
-    }
-    //click img
-    controller.imgClick();
-    //keyword search
-    controller.keywordSearch();
-    //scroll down
-    controller.scrolldown();
-  }
+      else{
+        li.className = "img-order-list";
+      }
+      div.appendChild(li);
+    };
+  },
+  renderData: function() {
+    let name, mrt, category, description, address, transport, images, div;
+    name = models.data.name;
+    mrt = models.data.mrt;
+    category = models.data.category;
+    description = models.data.description;
+    address = models.data.address;
+    transport = models.data.transport;
+    this.images = models.data.images;
+    // location
+    div = document.querySelector(".name");
+    div.textContent = name;
+    // category + mrt
+    div = document.querySelector(".location");
+    div.textContent = category + " at " + mrt;
+    //content (description)
+    div = document.querySelector(".content");
+    div.textContent = description;
+    //address-content
+    div = document.querySelector(".address-content");
+    div.textContent = address;
+    //traffic-content
+    div = document.querySelector(".traffic-content");
+    div.textContent = transport;
+    //images
+    div = document.querySelector(".img");
+    const img = document.createElement("img");
+    img.className = "img-pic";
+    img.src = this.images[this.imageIndex];
+    div.appendChild(img);
+    //show img order dot
+    this.renderImageorder();
+
+    // choose package;
+    controller.choosePackage();
+    controller.clickImage();
+  },
 
 };
-//controllers
-let controller={
+//controller
+let controller = {
   checkLogin:function(){
     models.checkUserLogin().then(()=>{
       views.renderLogin();
@@ -427,32 +358,45 @@ let controller={
     let backtologin = document.querySelector(".register-login"); // registerBox to loginBox
     backtologin.addEventListener("click",views.showLogin);
   },
-  imgClick:function(){
-    let imgs = document.querySelectorAll(".img");
-    for(let i = 0;i<imgs.length;i++){
-      let url = "/attraction/" + imgs[i].id;
-      imgs[i].addEventListener("click", function(e){
-        window.location.replace(url);
-      });
-    }
-  },
-  keywordSearch:function(){
-    // get keywordSearch
-    let btn_keyword = document.querySelector(".keyin_Keyword");
-    btn_keyword.addEventListener("click",()=>{
-      //clear
-      views.clear();
-      models.getkeywordsearch().then(()=>{
-        views.renderData();
-      });
+  // Choose package data
+  choosePackage:function(){
+    const timeUp = document.querySelector("#timeUp");
+    const timeDown = document.querySelector("#timeDown");
+    const totalFee = document.querySelector(".total-fee");
+    timeUp.addEventListener("click",()=>{
+      totalFee.innerHTML = "新台幣 2000元";
+    });
+    timeDown.addEventListener("click",()=>{
+      totalFee.innerHTML = "新台幣 2500元";
     });
   },
-  scrolldown:function(){
-    window.addEventListener("scroll",views.scrolldown);
+  clickImage:function(){
+    const imgLeft = document.querySelector(".img-left");
+    const imgRight = document.querySelector(".img-right");
+    const img = document.querySelector(".img-pic");
+    //click left
+    imgLeft.addEventListener("click",()=>{
+      views.imageIndex -= 1;
+      if(views.imageIndex < 0 ){
+        views.imageIndex = views.images.length-1;
+      }
+      views.renderImageorder();
+      img.src = views.images[views.imageIndex];
+    });
+    //click right
+    imgRight.addEventListener("click",()=>{
+      views.imageIndex += 1;
+      if(views.imageIndex > views.images.length-1 ){
+        views.imageIndex = 0;
+      }
+      views.renderImageorder();
+      img.src = views.images[views.imageIndex];
+    });
+
   },
   init:function(){
     this.checkLogin();//check login session
-    models.getProductData().then(()=>{ //get product pic
+    models.getData().then(()=>{ //get product pic
       views.renderData();
       //login/register or cancel
       controller.loginRegister();
@@ -462,9 +406,6 @@ let controller={
       controller.userLogin(); // user login btn
     });
   }
-};
+}
 
 controller.init();
-
-
-// controller.checkLogout();
