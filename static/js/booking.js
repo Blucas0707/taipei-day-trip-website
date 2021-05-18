@@ -116,21 +116,36 @@ let models = {
       // console.log(result);
     });
   },
-  getData: function() {
-    let url = "/api/" + location.pathname;
-    return fetch(url).then((response) => {
-      return response.json();
-    }).then((result) => {
-      this.data = result.data;
-      // console.log(this.data);
-    });
-  }
+  booking:{
+    bookingData:null,
+    getBookingData:function(){
+      return fetch("/api/booking",{
+        method:"GET",
+        headers: {"Content-type":"application/json;"},
+      }).then((response)=>{
+        return response.json();
+      }).then((result)=>{
+          this.bookingData = result;
+          // console.log(result);
+        // console.log(this.loginData);
+      });
+    },
+    deleteBookingDate:function(){
+      return fetch("api/booking", {
+        method:"DELETE",
+        headers: {"Content-type":"application/json;"},
+      }).then((response)=>{
+        return response.json();
+      }).then((result)=>{
+          this.bookingData = result;
+          console.log(result);
+        // console.log(this.loginData);
+      });
+    },
+  },
 };
 //views
 let views = {
-  need_scrolldown:true,
-  images:null,
-  imageIndex:0,
   renderLogout:function(){
     let navLogin = document.querySelector(".nav-login");
     let navLogout = document.querySelector(".nav-logout");
@@ -148,6 +163,7 @@ let views = {
       navLogin.innerHTML = "登出系統";
     }else{
       navLogin.innerHTML = "註冊/登入";
+      window.location.replace("/"); //redirect to home page
     }
   },
   renderLoginValidation:function(){
@@ -235,6 +251,7 @@ let views = {
       login.style.display = "block";
       login.innerHTML = "註冊/登入";
       models.checkUserLogout(); //logout & delete session
+      window.location.replace("/"); //direct to home page
     }
 
   },
@@ -246,65 +263,94 @@ let views = {
     let registerBox = document.querySelector(".register-box");
     registerBox.style.display="none";  //隱藏register box
   },
-  renderImageorder:function(){
-    //remove all child first
-    div = document.querySelector(".img-order");
-    while (div.firstChild) {
-      div.removeChild(div.firstChild);
-    }
-    //add new child for img order dot
-    for(let order = 0 ; order < this.images.length; order++){
-      const li = document.createElement("li");
-      if(order == this.imageIndex){
-        li.className = "img-order-pick";
-      }
-      else{
-        li.className = "img-order-list";
-      }
-      div.appendChild(li);
-    };
-  },
   renderData: function() {
-    let name, mrt, category, description, address, transport, images, div;
-    name = models.data.name;
-    mrt = models.data.mrt;
-    category = models.data.category;
-    description = models.data.description;
-    address = models.data.address;
-    transport = models.data.transport;
-    this.images = models.data.images;
-    // location
-    div = document.querySelector(".name");
-    div.textContent = name;
-    // category + mrt
-    div = document.querySelector(".location");
-    div.textContent = category + " at " + mrt;
-    //content (description)
-    div = document.querySelector(".content");
-    div.textContent = description;
-    //address-content
-    div = document.querySelector(".address-content");
-    div.textContent = address;
-    //traffic-content
-    div = document.querySelector(".traffic-content");
-    div.textContent = transport;
-    //images
-    div = document.querySelector(".img");
-    const img = document.createElement("img");
-    img.className = "img-pic";
-    img.src = this.images[this.imageIndex];
-    div.appendChild(img);
-    //show img order dot
-    this.renderImageorder();
+    let greeting,username, email, attractionId, name, address, image, date, price, time, span, div;
+    let checknull = models.booking.bookingData;
+    //greeting
+    username = models.loginData.data.name;
+    greeting = document.querySelector(".greeting");
+    greeting.innerHTML = "你好，" + username + "，待預訂的行程如下：";
 
-    // choose package;
-    controller.choosePackage();
-    controller.clickImage();
+    if(checknull == null){ //no booking data
+      div = document.querySelector(".no-booking");
+      div.style.display = "flex";
+      div = document.querySelector(".attraction");
+      div.style.display = "None";
+      div = document.querySelector(".contact");
+      div.style.display = "None";
+      div = document.querySelector(".payment");
+      div.style.display = "None";
+      div = document.querySelector(".confirm");
+      div.style.display = "None";
+    }
+    else{ //booking data exist
+      let data = models.booking.bookingData.data;
+      attractionId = data.attraction.id;
+      name = data.attraction.name;
+      address = data.attraction.address;
+      image = data.attraction.image;
+      date = data.date;
+      price = data.price;
+      time = data.time;
+
+      //input username
+      let input_name = document.querySelector(".input-contact-name");
+      input_name.value = username;
+      //input email
+      email = models.loginData.data.email;
+      let input_email = document.querySelector(".input-contact-email");
+      input_email.value = email;
+      // name
+      div = document.querySelector(".attraction-title");
+      div.innerHTML = name;
+      // date
+      span = document.querySelector(".input-attraction-date");
+      span.innerHTML = date;
+      // time
+      span = document.querySelector(".input-attraction-time");
+      if(time=="morning"){
+        span.innerHTML = "早上九點到中午十二點";
+      }else{
+        span.innerHTML = "下午一點到下午四點";
+      }
+      // price
+      span = document.querySelector(".input-attraction-price");
+      span.innerHTML = price + " 元";
+      // address
+      span = document.querySelector(".input-attraction-address");
+      span.innerHTML = address;
+    }
+
   },
 
 };
+
+
 //controller
 let controller = {
+  booking:{
+    deleteBooking:function(){
+      let deletebtn = document.querySelector(".delete-icon");
+      deletebtn.addEventListener("click",()=>{
+        models.booking.deleteBookingDate().then(()=>{
+          window.location.reload(); //delete booking ans and refresh
+        });
+      });
+    },
+    viewBooking:function(){
+      let viewbooking_btn = document.querySelector(".nav-schedule");
+      viewbooking_btn.addEventListener("click",()=>{
+        //not login
+        let login = document.querySelector(".nav-login");
+        if(login.innerHTML != "登出系統"){
+          views.showLogin();
+        }
+        else{ //logged in => direct to /booking
+              window.location.replace("/booking");
+          }
+      });
+    },
+  },
   checkLogin:function(){
     models.checkUserLogin().then(()=>{
       views.renderLogin();
@@ -358,45 +404,9 @@ let controller = {
     let backtologin = document.querySelector(".register-login"); // registerBox to loginBox
     backtologin.addEventListener("click",views.showLogin);
   },
-  // Choose package data
-  choosePackage:function(){
-    const timeUp = document.querySelector("#timeUp");
-    const timeDown = document.querySelector("#timeDown");
-    const totalFee = document.querySelector(".total-fee");
-    timeUp.addEventListener("click",()=>{
-      totalFee.innerHTML = "新台幣 2000元";
-    });
-    timeDown.addEventListener("click",()=>{
-      totalFee.innerHTML = "新台幣 2500元";
-    });
-  },
-  clickImage:function(){
-    const imgLeft = document.querySelector(".img-left");
-    const imgRight = document.querySelector(".img-right");
-    const img = document.querySelector(".img-pic");
-    //click left
-    imgLeft.addEventListener("click",()=>{
-      views.imageIndex -= 1;
-      if(views.imageIndex < 0 ){
-        views.imageIndex = views.images.length-1;
-      }
-      views.renderImageorder();
-      img.src = views.images[views.imageIndex];
-    });
-    //click right
-    imgRight.addEventListener("click",()=>{
-      views.imageIndex += 1;
-      if(views.imageIndex > views.images.length-1 ){
-        views.imageIndex = 0;
-      }
-      views.renderImageorder();
-      img.src = views.images[views.imageIndex];
-    });
-
-  },
   init:function(){
     this.checkLogin();//check login session
-    models.getData().then(()=>{ //get product pic
+    models.booking.getBookingData().then(()=>{ //get product pic
       views.renderData();
       //login/register or cancel
       controller.loginRegister();
@@ -404,6 +414,10 @@ let controller = {
       // check login & logout
       controller.userRegister(); // user register btn
       controller.userLogin(); // user login btn
+      // check delete booking
+      controller.booking.deleteBooking();
+      // view booking
+      controller.booking.viewBooking();
     });
   }
 }

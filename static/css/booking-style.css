@@ -60,7 +60,7 @@ a, a:link, a:visited {
   height: 16px;
 }
 
-.login-cancel:hover, .register-cancel:hover {
+.login-cancel:hover, .register-cancel:hover, .nav-schedule:hover {
   cursor: pointer;
 }
 
@@ -222,7 +222,7 @@ main {
 footer {
   display: flex;
   background-color: #757575;
-  height: 104px;
+  height: 100vh;
   font-family: Noto Sans TC;
   font-style: normal;
   font-weight: bold;
@@ -230,7 +230,8 @@ footer {
   line-height: 13px;
   color: #FFFFFF;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
+  padding-top: 45px;
 }
 
 /* input */
@@ -261,6 +262,20 @@ input {
   color: #666666;
 }
 
+/* no-booking */
+.no-booking {
+  display: none;
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 13px;
+  /* or 83% */
+  align-items: center;
+  color: #666666;
+  height: 24px;
+  padding: 35px 90px 40px 90px;
+}
 /* attraction */
 .attraction {
   border: 1px solid #E8E8E8;
@@ -440,6 +455,7 @@ input {
 }
 
 .confirm-price {
+  display: flex;
   height: 14px;
   /* Body - Bold 16(13.3) */
   font-family: Noto Sans TC;
@@ -450,6 +466,8 @@ input {
   /* Gray 800 */
   color: #666666;
   margin-bottom: 25px;
+  justify-content:flex-end;
+  align-items: center;
 }
 
 .confirm-btn {
@@ -466,7 +484,6 @@ input {
   font-weight: normal;
   font-size: 19px;
   line-height: 16px;
-  line-height: 16px;
   justify-content: center;
   align-items: center;
   color: #FFFFFF;
@@ -475,13 +492,26 @@ input {
 /* @media (min-width: 1200px) {
 
 } */
-  @media (min-width: 600px) and (max-width:1200px) {
-    .nav-bar {
-      position: fixed;
-      background-color: white;
-      border-bottom: 1px solid #E8E8E8;
-      z-index: 2;
+  @media (min-width: 600px) and (max-width:800px) {
+    .nav-bar-items {
+      margin: auto 20px;
     }
+    .attraction-info{
+      display: block;
+      /* justify-content: center; */
+      flex-wrap: wrap;
+    }
+    .contact-remider {
+      line-height: 25px;
+      padding-top: 20px;
+    }
+    .attraction-Content {
+      margin-left: 0;
+      margin-top: 20px;
+    }
+    /* .input-attraction-address {
+      line-height: 32px;
+    } */
   }
 
   @media (max-width: 600px) {
@@ -495,7 +525,7 @@ input {
       padding-top: 7px;
     }
     .greeting {
-      padding: 46px 0 0 22px;
+      padding: 46px 0 0 10px;
     }
     .attraction-info{
       display: block;
@@ -515,5 +545,8 @@ input {
     }
     .confirm-box {
       right:10px;
+    }
+    .no-booking {
+      padding-left: 10px;
     }
   }

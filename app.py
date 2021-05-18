@@ -1,6 +1,7 @@
 # from Model.api import get_api_attractions, get_api_attractionId,api_internal_error,api_not_found_error, api_not_allowed_error
 from Controller.api_user import *
 from Controller.api_attraction import *
+from Controller.api_booking import *
 from config import app
 
 # Pages
@@ -28,10 +29,14 @@ def api_user():
 def api_attractions():
 	return get_api_attractions()
 
-
 @app.route("/api/attraction/<attractionId>", methods = ["GET"])
 def api_attractionId(attractionId):
 	return get_api_attractionId(attractionId)
+
+#訂單API
+@app.route("/api/booking", methods = ["GET","POST","DELETE"])
+def api_booking():
+	return get_api_booking()
 
 #error handle
 @app.errorhandler(500)

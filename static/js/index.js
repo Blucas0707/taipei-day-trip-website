@@ -450,16 +450,31 @@ let controller={
   scrolldown:function(){
     window.addEventListener("scroll",views.scrolldown);
   },
+  viewBooking:function(){
+    let viewbooking_btn = document.querySelector(".nav-schedule");
+    viewbooking_btn.addEventListener("click",()=>{
+      //not login
+      let login = document.querySelector(".nav-login");
+      if(login.innerHTML != "登出系統"){
+        views.showLogin();
+      }
+      else{ //logged in => direct to /booking
+            window.location.replace("/booking");
+        }
+    });
+  },
   init:function(){
     this.checkLogin();//check login session
     models.getProductData().then(()=>{ //get product pic
       views.renderData();
       //login/register or cancel
-      controller.loginRegister();
-      controller.cancelLoginRegister();
+      this.loginRegister();
+      this.cancelLoginRegister();
       // check login & logout
-      controller.userRegister(); // user register btn
-      controller.userLogin(); // user login btn
+      this.userRegister(); // user register btn
+      this.userLogin(); // user login btn
+      //booking
+      this.viewBooking();
     });
   }
 };

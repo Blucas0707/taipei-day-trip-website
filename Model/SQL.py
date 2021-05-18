@@ -209,6 +209,76 @@ class SQLDB:
         except:
             return 500
 
+    def get_booking(self, para =None):
+        # try:
+        sql = """select * from taipei_travel_booking where email = %s order by id DESC limit 1"""
+        con = self.pool.get_connection()
+        cursor = con.cursor()
+        cursor.execute(sql, para)
+        result = cursor.fetchone()
+        # close sql connect
+        self.close(cursor, con)
+
+        if result != None : # not null
+            # print(f"para = {para},result={result}")
+            email = result[1]
+            attractionId = result[2]
+            date = result[3]
+            time = result[4]
+            price = result[5]
+
+            #
+            sql = """select name,address from taipei_travel_info where id = %s limit 1"""
+            para = (attractionId,)
+            con = self.pool.get_connection()
+            cursor = con.cursor()
+            cursor.execute(sql, para)
+            result = cursor.fetchone()
+            # close sql connect
+            self.close(cursor, con)
+            # print(f"para = {para},result={result}")
+            name = result[0]
+            address = result[1]
+            #
+            sql = """select link from taipei_travel_images where id = %s limit 1"""
+            para = (attractionId,)
+            con = self.pool.get_connection()
+            cursor = con.cursor()
+            cursor.execute(sql, para)
+            result = cursor.fetchone()
+            # close sql connect
+            self.close(cursor, con)
+            image = result[0]
+            #
+
+            results = []
+            results.append(attractionId)
+            results.append(name)
+            results.append(address)
+            results.append(image)
+            results.append(date)
+            results.append(time)
+            results.append(price)
+            # print(results)
+            return results
+        else: #booking = null
+            return None
+
+        # except:
+        #     return 500
+    def delete_booking(self, para =None):
+        try:
+            sql = """delete from taipei_travel_booking where email = %s"""
+            con = self.pool.get_connection()
+            cursor = con.cursor()
+            cursor.execute(sql, para)
+            print(f"para={para}")
+            con.commit()
+            # close sql connect
+            self.close(cursor, con)
+            return 200
+        except:
+            return 500
 
 
 

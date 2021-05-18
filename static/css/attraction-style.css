@@ -58,7 +58,7 @@ a,a:link,a:visited {
   width: 16px;
   height: 16px;
 }
-.login-cancel:hover , .register-cancel:hover {
+.login-cancel:hover , .register-cancel:hover, .nav-schedule:hover, .booking-confirm:hover, .time-select:hover, .booking-date-input:hover {
   cursor: pointer;
 }
 .login-email, .login-password,.register-name, .register-email, .register-password  {
@@ -309,11 +309,13 @@ img {
 }
 
 .booking {
+  position: relative;
   background: #E8E8E8;
   border-radius: 5px;
   margin: 5px 0;
-  height: 302px;
+  /* height: 302px; */
   margin: 0 10px;
+  padding-bottom: 41px;
 }
 
 .booking-name {
@@ -384,6 +386,28 @@ img {
   font-size: 19px;
   line-height: 16px;
   margin-left: 20px;
+  /* margin-bottom:41px; */
+}
+
+.booking-confirm-null {
+  display: none;
+  height: 36px;
+  /* width: 154px; */
+  /* background-color: #448899; */
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+  color: red;
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 19px;
+  line-height: 16px;
+  /* margin-left: 20px; */
+  position: absolute;
+  /* left: calc(50% - 76px); */
+  margin-left: 20px;
+
 }
 
 input[type='radio'] {
@@ -514,7 +538,4 @@ footer {
     margin-bottom: 24px;
   }
 
-  .booking {
-    padding-bottom: 24px;
-  }
 }

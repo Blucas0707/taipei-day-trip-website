@@ -125,6 +125,52 @@ let models = {
       this.data = result.data;
       // console.log(this.data);
     });
+  },
+  booking:{
+    bookingData:null,
+    establishBooking:function(){
+      let attractionId = models.data.id;
+      let date = document.querySelector(".booking-date-input").value;
+      // time
+      let time,price;
+      if(document.querySelector(".total-fee").innerHTML == "新台幣 2000元"){
+        time = "morning";
+        price = 2000;
+      }else{
+        time = "afternoon";
+        price = 2500;
+      }
+      let data = {
+        "attractionId": attractionId,
+        "date": date,
+        "time": time,
+        "price": price
+      };
+      return fetch("/api/booking", {
+        method:"POST",
+        headers: {"Content-type":"application/json;"},
+        body: JSON.stringify(data)
+      }).then((response)=>{
+        return response.json();
+      }).then((result)=>{
+        this.bookingData = result;
+        // console.log(this.bookingData);
+        console.log(result);
+      });
+    },
+    deleteBookingDate:function(){
+      return fetch("/api/booking", {
+        method:"DELETE",
+        headers: {"Content-type":"application/json;"},
+      }).then((response)=>{
+        return response.json();
+      }).then((result)=>{
+          this.bookingData = result;
+          // console.log(result);
+          // console.log("delete:" + result);
+        // console.log(this.loginData);
+      });
+    },
   }
 };
 //views
@@ -411,12 +457,63 @@ let controller = {
     });
 
   },
-  booking:function(){
-    let booking_btn = document.querySelector(".booking-confirm");
-    booking_btn.addEventListener("click",()=>{
-      let url = "/booking";
-      window.location.replace(url);
-    });
+  booking:{
+    judgeDate:function(date){
+      let today = Date.now();
+      let bookingDate = Date.parse(date);
+      // console.log(today,bookingDate);
+      if(bookingDate < today){
+        return false;
+      }else{
+        return true;
+      }
+    },
+    establishBooking:function(){
+      let booking_btn = document.querySelector(".booking-confirm");
+      booking_btn.addEventListener("click",()=>{
+        //not login
+        let login = document.querySelector(".nav-login");
+        if(login.innerHTML != "登出系統"){
+          views.showLogin();
+        }
+        else{ //logged in
+          let date, price, div;
+          date = document.querySelector(".booking-date-input").value;
+          price = document.querySelector(".total-fee").innerHTML;
+          if(date == null || price == ""){ //input = null
+            div = document.querySelector(".booking-confirm-null");
+            div.style.display = "flex";
+          }
+          else if (this.judgeDate(date) == false) { // booking date 過期
+            div = document.querySelector(".booking-confirm-null");
+            div.style.display = "flex";
+            div.innerHTML = "所選日期已過，請重新選擇";
+          }
+          else{ //input ok
+            //deleteBooking
+            models.booking.deleteBookingDate().then(()=>{
+              //establishBooking
+              models.booking.establishBooking();
+              //redirect to booking page
+              window.location.replace("/booking");
+            });
+          }
+        }
+      });
+    },
+    viewBooking:function(){
+      let viewbooking_btn = document.querySelector(".nav-schedule");
+      viewbooking_btn.addEventListener("click",()=>{
+        //not login
+        let login = document.querySelector(".nav-login");
+        if(login.innerHTML != "登出系統"){
+          views.showLogin();
+        }
+        else{ //logged in => direct to /booking
+              window.location.replace("/booking");
+          }
+      });
+    },
   },
   init:function(){
     this.checkLogin();//check login session
@@ -429,7 +526,9 @@ let controller = {
       this.userRegister(); // user register btn
       this.userLogin(); // user login btn
       //booking
-      this.booking();
+      this.booking.establishBooking();
+      //view booking
+      this.booking.viewBooking();
     });
   }
 }

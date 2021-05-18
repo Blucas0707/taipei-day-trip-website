@@ -12,7 +12,7 @@ config = dotenv_values("../key/.env")
 mysql = SQLDB()
 
 #Booking
-def get_api_booking(app):
+def get_api_booking():
     print(request.method)
     if request.method == "GET":
         return get_booking_info()
@@ -28,36 +28,38 @@ def get_booking_info():
             "message": "未登入系統，拒絕存取"
         }
     else:  # Login
-        # user email
-        email = getSession()["email"]
-        # booking data
-        data = request.get_json()
-        attractionid = data.data.attraction["id"]
-        name = data.data.attraction["name"]
-        address = data.data.attraction["address"]
-        image = data.data.attraction["image"]
-        date = data.data["date"]
-        time = data.data["time"]
-        price = data.data["price"]
-        data_dict = {
-           "data":{
-                "attraction":{
-                    "id":attractionid,
-                    "name":name,
-                    "address":address,
-                    "image":image,
-                },
-                "date":date,
-                "time":time,
-                "price":price,
-           }
-        }
+        email = getSession()[0] # user email
+        results = mysql.get_booking((email,))
+        if results != None:
+            # print(f"results={results}")
+            attractionId = results[0]
+            name = results[1]
+            address = results[2]
+            image = results[3]
+            date = results[4]
+            time = results[5]
+            price = results[6]
+
+            data_dict = {
+               "data":{
+                    "attraction":{
+                        "id":attractionId,
+                        "name":name,
+                        "address":address,
+                        "image":image,
+                    },
+                    "date":date,
+                    "time":time,
+                    "price":price,
+               }
+            }
+        else:
+            data_dict = None
     jsonformat = json.dumps(data_dict, sort_keys=False, indent=4)
     # print(f"json:{jsonformat}")
     return jsonformat
 
 def establish_booking_info():
-
     if getSession() == False: #not login
         data_dict = {
             "error": True,
@@ -65,10 +67,11 @@ def establish_booking_info():
         }
     else: #Login
         # user email
-        email = getSession()["email"]
+        email = getSession()[0]
         #booking data
         data = request.get_json()
-        attractionid = data["attractionid"]
+        print(data)
+        attractionid = data["attractionId"]
         date = str(data["date"])
         time = str(data["time"])
         price = data["price"]
@@ -102,10 +105,20 @@ def delete_booking_info():
             "message": "未登入系統，拒絕存取"
         }
     else:  # Login
-        # user email
-        data_dict = {
-            "ok": True
-        }
+        # print(f"Session:{getSession()}")
+        email = getSession()[0] #email
+        # print(f"email: {email}")
+        #delete booking data
+        result = mysql.delete_booking((email,))
+        if result == 200:
+            data_dict = {
+                "ok": True
+            }
+        else:
+            data_dict = {
+                "error": True,
+                "message": "Internal Server Error."
+            }
     jsonformat = json.dumps(data_dict, sort_keys=False, indent=4)
     return jsonformat
 
