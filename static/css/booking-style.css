@@ -60,7 +60,7 @@ a, a:link, a:visited {
   height: 16px;
 }
 
-.login-cancel:hover, .register-cancel:hover, .nav-schedule:hover {
+.login-cancel:hover, .register-cancel:hover, .nav-schedule:hover, .delete-icon:hover {
   cursor: pointer;
 }
 
