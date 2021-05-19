@@ -2,6 +2,7 @@
 from Controller.api_user import *
 from Controller.api_attraction import *
 from Controller.api_booking import *
+from Controller.api_orders import *
 from config import app
 
 # Pages
@@ -37,6 +38,17 @@ def api_attractionId(attractionId):
 @app.route("/api/booking", methods = ["GET","POST","DELETE"])
 def api_booking():
 	return get_api_booking()
+
+#付款API
+@app.route("/api/orders", methods = ["POST"])
+def api_orders():
+	return get_api_orders()
+
+@app.route("/api/order/<orderNumber>", methods = ["GET"])
+def api_orders_number(orderNumber):
+	return get_api_orders_number(orderNumber)
+
+
 
 #error handle
 @app.errorhandler(500)

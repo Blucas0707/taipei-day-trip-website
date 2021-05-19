@@ -118,6 +118,7 @@ let models = {
   },
   booking:{
     bookingData:null,
+    bookingDeleted:null,
     getBookingData:function(){
       return fetch("/api/booking",{
         method:"GET",
@@ -126,6 +127,7 @@ let models = {
         return response.json();
       }).then((result)=>{
           this.bookingData = result;
+          this.bookingDeleted = null;
           // console.log(result);
         // console.log(this.loginData);
       });
@@ -137,9 +139,57 @@ let models = {
       }).then((response)=>{
         return response.json();
       }).then((result)=>{
-          this.bookingData = result;
+          this.bookingDeleted = result;
+          this.bookingData = null;
           console.log(result);
         // console.log(this.loginData);
+      });
+    },
+  },
+  order:{
+    orderData:null,
+    establishOrder:function(){
+      let prime = "TEST";
+      let price = models.booking.bookingData.data.price;
+      let attractionId = models.booking.bookingData.data.attraction.id;
+      let attractionName = models.booking.bookingData.data.attraction.name;
+      let attractionAddress = models.booking.bookingData.data.attraction.address;
+      let attractionImage = models.booking.bookingData.data.attraction.image;
+      let date = models.booking.bookingData.data.date;
+      let time = models.booking.bookingData.data.time;
+      let name = models.loginData.data.name;
+      let email = models.loginData.data.email;
+      let phone = document.querySelector(".input-contact-phonenumber").value;
+
+      let data = {
+        "prime": prime,
+        "order": {
+          "price": price,
+          "trip": {
+            "attraction": {
+              "id": attractionId,
+              "name": attractionName,
+              "address": attractionAddress,
+              "image": attractionImage
+            },
+            "date": date,
+            "time": time
+          },
+          "contact": {
+            "name": name,
+            "email": email,
+            "phone": phone
+          }
+        }
+      };
+      return fetch("/api/orders",{
+        method:"POST",
+        headers: {"Content-type":"application/json;"},
+        body: JSON.stringify(data)
+      }).then((response)=>{
+        return response.json();
+      }).then((result)=>{
+        this.orderData = result;
       });
     },
   },
@@ -265,13 +315,14 @@ let views = {
   },
   renderData: function() {
     let greeting,username, email, attractionId, name, address, image, date, price, time, span, div;
-    let checknull = models.booking.bookingData;
+    // let checkdeleted = models.booking.bookingDeleted;
+    let dataexisted = models.booking.bookingData;
     //greeting
     username = models.loginData.data.name;
     greeting = document.querySelector(".greeting");
     greeting.innerHTML = "你好，" + username + "，待預訂的行程如下：";
 
-    if(checknull == null){ //no booking data
+    if(dataexisted == null){ //no booking data
       div = document.querySelector(".no-booking");
       div.style.display = "flex";
       div = document.querySelector(".attraction");
@@ -333,7 +384,12 @@ let controller = {
       let deletebtn = document.querySelector(".delete-icon");
       deletebtn.addEventListener("click",()=>{
         models.booking.deleteBookingDate().then(()=>{
-          window.location.reload(); //delete booking ans and refresh
+          views.renderData();
+          // models.booking.getBookingData().then(()=>{ //delete booking ans and refresh
+          //   if(models.booking.bookingData == null){
+          //     views.renderData();
+          //   }
+          //   });
         });
       });
     },
@@ -346,14 +402,27 @@ let controller = {
           views.showLogin();
         }
         else{ //logged in => direct to /booking
-              window.location.replace("/booking");
+          models.booking.getBookingData().then(()=>{ //get product pic
+            if(models.booking.bookingData == null){
+              views.renderData();
+              }
+            });
           }
       });
     },
   },
-  checkLogin:function(){
+  order:{
+    establishOrder:function(){
+      let order_btn = document.querySelector(".confirm-btn");
+      order_btn.addEventListener("click",()=>{
+        models.order.establishOrder();
+      });
+    },
+  },
+  checkLogin:function(resolve){
     models.checkUserLogin().then(()=>{
       views.renderLogin();
+      resolve(true);
     });
   },
   userRegister:function(){
@@ -405,20 +474,25 @@ let controller = {
     backtologin.addEventListener("click",views.showLogin);
   },
   init:function(){
-    this.checkLogin();//check login session
-    models.booking.getBookingData().then(()=>{ //get product pic
-      views.renderData();
-      //login/register or cancel
-      controller.loginRegister();
-      controller.cancelLoginRegister();
-      // check login & logout
-      controller.userRegister(); // user register btn
-      controller.userLogin(); // user login btn
-      // check delete booking
-      controller.booking.deleteBooking();
-      // view booking
-      controller.booking.viewBooking();
-    });
+    let p = new Promise(controller.checkLogin);
+    p.then(()=>{
+      models.booking.getBookingData().then(()=>{ //get product pic
+        views.renderData();
+        //login/register or cancel
+        controller.loginRegister();
+        controller.cancelLoginRegister();
+        // check login & logout
+        controller.userRegister(); // user register btn
+        controller.userLogin(); // user login btn
+        // check delete booking
+        controller.booking.deleteBooking();
+        // view booking
+        controller.booking.viewBooking();
+        // orders
+        controller.order.establishOrder();
+      });
+    }); //check login session
+
   }
 }
 

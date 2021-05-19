@@ -374,9 +374,10 @@ let views={
 };
 //controllers
 let controller={
-  checkLogin:function(){
+  checkLogin:function(resolve){
     models.checkUserLogin().then(()=>{
       views.renderLogin();
+      resolve(true);
     });
   },
   userRegister:function(){
@@ -464,18 +465,21 @@ let controller={
     });
   },
   init:function(){
-    this.checkLogin();//check login session
-    models.getProductData().then(()=>{ //get product pic
-      views.renderData();
-      //login/register or cancel
-      this.loginRegister();
-      this.cancelLoginRegister();
-      // check login & logout
-      this.userRegister(); // user register btn
-      this.userLogin(); // user login btn
-      //booking
-      this.viewBooking();
+    let p = new Promise(this.checkLogin);//check login session
+    p.then(()=>{
+      models.getProductData().then(()=>{ //get product pic
+        views.renderData();
+        //login/register or cancel
+        this.loginRegister();
+        this.cancelLoginRegister();
+        // check login & logout
+        this.userRegister(); // user register btn
+        this.userLogin(); // user login btn
+        //booking
+        this.viewBooking();
+      });
     });
+
   }
 };
 

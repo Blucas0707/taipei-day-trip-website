@@ -219,6 +219,10 @@ main {
   margin: auto;
 }
 
+/* .main-body {
+  display: none;
+} */
+
 footer {
   display: flex;
   background-color: #757575;

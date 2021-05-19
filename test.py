@@ -1,6 +1,2 @@
-x = 3
-print(id(x))
-y = x
-print(id(y))
-y = x + 1
-print(id(y))
+from datetime import datetime
+print(datetime.now().strftime("%Y%m%d%H%M%S"))

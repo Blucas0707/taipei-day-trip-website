@@ -86,6 +86,8 @@ class SQLDB:
                 self.close(cursor,con)
 
         except:
+            # rollback DB
+            con.rollback()
             data_dict = {
                 "error": True,
                 "message": "Internal server error"
@@ -102,67 +104,78 @@ class SQLDB:
         }
         con = self.pool.get_connection()
         cursor = con.cursor()
-        if keyword == "":
-            sql = "select * from (select * from taipei_travel_info order by id) as T limit %s,12"
-            para = (offset,)
-        else:
-            sql = "select * from (select * from taipei_travel_info order by id)as T where name like %s limit %s,12"
-            para = ("%"+keyword+"%", offset)
-        cursor.execute(sql,para)
-        results = cursor.fetchall()
+        try:
+            if keyword == "":
+                sql = "select * from (select * from taipei_travel_info order by id) as T limit %s,12"
+                para = (offset,)
+            else:
+                sql = "select * from (select * from taipei_travel_info order by id)as T where name like %s limit %s,12"
+                para = ("%"+keyword+"%", offset)
+            cursor.execute(sql,para)
+            results = cursor.fetchall()
 
-        #no further data
-        if len(results) == 0:
-            data_dict["nextPage"] = None
-            data_dict["data"] = None
-        else:
-            for result in results:
-                new_dict = {}
-                new_dict["id"] = result[0]
-                new_dict["name"] = result[1]
-                new_dict["category"] = result[2]
-                new_dict["description"] = result[3]
-                new_dict["address"] = result[4]
-                new_dict["transport"] = result[5]
-                new_dict["mrt"] = result[6]
-                new_dict["latitude"] = float(result[7])
-                new_dict["longitude"] = float(result[8])
-                # get image link
-                sql = "select link from taipei_travel_images where id = '%s'"
-                cursor.execute(sql, (new_dict["id"],))
-                results = cursor.fetchall()
-                image_links = []
+            #no further data
+            if len(results) == 0:
+                data_dict["nextPage"] = None
+                data_dict["data"] = None
+            else:
                 for result in results:
-                    image_links.append(result[0])
+                    new_dict = {}
+                    new_dict["id"] = result[0]
+                    new_dict["name"] = result[1]
+                    new_dict["category"] = result[2]
+                    new_dict["description"] = result[3]
+                    new_dict["address"] = result[4]
+                    new_dict["transport"] = result[5]
+                    new_dict["mrt"] = result[6]
+                    new_dict["latitude"] = float(result[7])
+                    new_dict["longitude"] = float(result[8])
+                    # get image link
+                    sql = "select link from taipei_travel_images where id = '%s'"
+                    cursor.execute(sql, (new_dict["id"],))
+                    results = cursor.fetchall()
+                    image_links = []
+                    for result in results:
+                        image_links.append(result[0])
 
-                new_dict["images"] = image_links
-                data_dict["data"].append(new_dict)
-        # close sql connect
-        self.close(cursor, con)
-        return data_dict
-
+                    new_dict["images"] = image_links
+                    data_dict["data"].append(new_dict)
+            # close sql connect
+            self.close(cursor, con)
+            return data_dict
+        except:
+            # rollback DB
+            con.rollback()
+            return 500
     #USER
     def user_register(self, para =None ):
         # user existed
-        sql = """select count(*) from taipei_travel_user_info where email = %s limit 1 """
-        email = para[1] #email
-        con = self.pool.get_connection()
-        cursor = con.cursor()
-        cursor.execute(sql,(email,))
-        result = cursor.fetchone()
+        try:
+            sql = """select count(*) from taipei_travel_user_info where email = %s limit 1 """
+            email = para[1] #email
+            con = self.pool.get_connection()
+            cursor = con.cursor()
+            cursor.execute(sql,(email,))
+            result = cursor.fetchone()
 
-        if result[0] == 0: #user not existed
-            try:
-                sql = """insert into taipei_travel_user_info (name,email,password)  values (%s,%s,%s)"""
-                cursor.execute(sql, para)
-                con.commit()
-                # close sql connect
-                self.close(cursor, con)
-                return 200
-            except:
-                return 500
-        else:
-           return 400
+            if result[0] == 0: #user not existed
+                try:
+                    sql = """insert into taipei_travel_user_info (name,email,password)  values (%s,%s,%s)"""
+                    cursor.execute(sql, para)
+                    con.commit()
+                    # close sql connect
+                    self.close(cursor, con)
+                    return 200
+                except:
+                    # rollback DB
+                    con.rollback()
+                    return 500
+            else:
+               return 400
+        except:
+            # rollback DB
+            con.rollback()
+            return 500
 
 
     def user_login(self, para =None):
@@ -180,20 +193,26 @@ class SQLDB:
             else:
                 return 400
         except:
+            # rollback DB
+            con.rollback()
             return 500
 
     def checkLogin(self, para =None):
         #check user login
+        try:
+            sql = """select * from taipei_travel_user_info where email = %s and password = %s limit 1 """
+            con = self.pool.get_connection()
+            cursor = con.cursor()
+            cursor.execute(sql, para)
+            results = cursor.fetchone()
 
-        sql = """select * from taipei_travel_user_info where email = %s and password = %s limit 1 """
-        con = self.pool.get_connection()
-        cursor = con.cursor()
-        cursor.execute(sql, para)
-        results = cursor.fetchone()
-
-        # close sql connect
-        self.close(cursor, con)
-        return results
+            # close sql connect
+            self.close(cursor, con)
+            return results
+        except:
+            # rollback DB
+            con.rollback()
+            return 500
 
     #Booking
     def establish_booking(self, para =None):
@@ -207,65 +226,68 @@ class SQLDB:
             self.close(cursor, con)
             return 200
         except:
+            # rollback DB
+            con.rollback()
             return 500
 
     def get_booking(self, para =None):
-        # try:
-        sql = """select * from taipei_travel_booking where email = %s order by id DESC limit 1"""
-        con = self.pool.get_connection()
-        cursor = con.cursor()
-        cursor.execute(sql, para)
-        result = cursor.fetchone()
-        # close sql connect
-        self.close(cursor, con)
-
-        if result != None : # not null
-            # print(f"para = {para},result={result}")
-            email = result[1]
-            attractionId = result[2]
-            date = result[3]
-            time = result[4]
-            price = result[5]
-
-            #
-            sql = """select name,address from taipei_travel_info where id = %s limit 1"""
-            para = (attractionId,)
+        try:
+            sql = """select * from taipei_travel_booking where email = %s order by id DESC limit 1"""
             con = self.pool.get_connection()
             cursor = con.cursor()
             cursor.execute(sql, para)
             result = cursor.fetchone()
             # close sql connect
             self.close(cursor, con)
-            # print(f"para = {para},result={result}")
-            name = result[0]
-            address = result[1]
-            #
-            sql = """select link from taipei_travel_images where id = %s limit 1"""
-            para = (attractionId,)
-            con = self.pool.get_connection()
-            cursor = con.cursor()
-            cursor.execute(sql, para)
-            result = cursor.fetchone()
-            # close sql connect
-            self.close(cursor, con)
-            image = result[0]
-            #
 
-            results = []
-            results.append(attractionId)
-            results.append(name)
-            results.append(address)
-            results.append(image)
-            results.append(date)
-            results.append(time)
-            results.append(price)
-            # print(results)
-            return results
-        else: #booking = null
-            return None
+            if result != None : # not null
+                # print(f"para = {para},result={result}")
+                email = result[1]
+                attractionId = result[2]
+                date = result[3]
+                time = result[4]
+                price = result[5]
 
-        # except:
-        #     return 500
+                #
+                sql = """select name,address from taipei_travel_info where id = %s limit 1"""
+                para = (attractionId,)
+                con = self.pool.get_connection()
+                cursor = con.cursor()
+                cursor.execute(sql, para)
+                result = cursor.fetchone()
+                # close sql connect
+                self.close(cursor, con)
+                # print(f"para = {para},result={result}")
+                name = result[0]
+                address = result[1]
+                #
+                sql = """select link from taipei_travel_images where id = %s limit 1"""
+                para = (attractionId,)
+                con = self.pool.get_connection()
+                cursor = con.cursor()
+                cursor.execute(sql, para)
+                result = cursor.fetchone()
+                # close sql connect
+                self.close(cursor, con)
+                image = result[0]
+                #
+
+                results = []
+                results.append(attractionId)
+                results.append(name)
+                results.append(address)
+                results.append(image)
+                results.append(date)
+                results.append(time)
+                results.append(price)
+                # print(results)
+                return results
+            else: #booking = null
+                return None
+        except:
+            # rollback DB
+            con.rollback()
+            return 500
     def delete_booking(self, para =None):
         try:
             sql = """delete from taipei_travel_booking where email = %s"""
@@ -278,7 +300,11 @@ class SQLDB:
             self.close(cursor, con)
             return 200
         except:
+            # rollback DB
+            con.rollback()
             return 500
+
+
 
 
 
