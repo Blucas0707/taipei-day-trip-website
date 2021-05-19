@@ -336,6 +336,7 @@ let views = {
     }
     else{ //booking data exist
       let data = models.booking.bookingData.data;
+      image = data.attraction.image;
       attractionId = data.attraction.id;
       name = data.attraction.name;
       address = data.attraction.address;
@@ -351,6 +352,9 @@ let views = {
       email = models.loginData.data.email;
       let input_email = document.querySelector(".input-contact-email");
       input_email.value = email;
+      // image
+      let img = document.querySelector(".attraction-img-pic");
+      img.src = image.toString();
       // name
       div = document.querySelector(".attraction-title");
       div.innerHTML = name;
