@@ -470,13 +470,13 @@ let controller={
       models.getProductData().then(()=>{ //get product pic
         views.renderData();
         //login/register or cancel
-        this.loginRegister();
-        this.cancelLoginRegister();
+        controller.loginRegister();
+        controller.cancelLoginRegister();
         // check login & logout
-        this.userRegister(); // user register btn
-        this.userLogin(); // user login btn
+        controller.userRegister(); // user register btn
+        controller.userLogin(); // user login btn
         //booking
-        this.viewBooking();
+        controller.viewBooking();
       });
     });
 

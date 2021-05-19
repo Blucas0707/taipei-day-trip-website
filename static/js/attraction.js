@@ -481,7 +481,7 @@ let controller = {
           let date, price, div;
           date = document.querySelector(".booking-date-input").value;
           price = document.querySelector(".total-fee").innerHTML;
-          if(date == null || price == ""){ //input = null
+          if(date == "" || price == ""){ //input = null
             div = document.querySelector(".booking-confirm-null");
             div.style.display = "flex";
           }
@@ -522,15 +522,15 @@ let controller = {
       models.getData().then(()=>{ //get product pic
         views.renderData();
         //login/register or cancel
-        this.loginRegister();
-        this.cancelLoginRegister();
+        controller.loginRegister();
+        controller.cancelLoginRegister();
         // check login & logout
-        this.userRegister(); // user register btn
-        this.userLogin(); // user login btn
+        controller.userRegister(); // user register btn
+        controller.userLogin(); // user login btn
         //booking
-        this.booking.establishBooking();
+        controller.booking.establishBooking();
         //view booking
-        this.booking.viewBooking();
+        controller.booking.viewBooking();
       });
     });
   }
