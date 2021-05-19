@@ -1,4 +1,5 @@
 /*
+/*
     MVC (Model-View-Controller)
     資料處理 - 畫面處理 - 控制流程
   */
@@ -124,6 +125,52 @@ let models = {
       this.data = result.data;
       // console.log(this.data);
     });
+  },
+  booking:{
+    bookingData:null,
+    establishBooking:function(){
+      let attractionId = models.data.id;
+      let date = document.querySelector(".booking-date-input").value;
+      // time
+      let time,price;
+      if(document.querySelector(".total-fee").innerHTML == "新台幣 2000元"){
+        time = "morning";
+        price = 2000;
+      }else{
+        time = "afternoon";
+        price = 2500;
+      }
+      let data = {
+        "attractionId": attractionId,
+        "date": date,
+        "time": time,
+        "price": price
+      };
+      return fetch("/api/booking", {
+        method:"POST",
+        headers: {"Content-type":"application/json;"},
+        body: JSON.stringify(data)
+      }).then((response)=>{
+        return response.json();
+      }).then((result)=>{
+        this.bookingData = result;
+        // console.log(this.bookingData);
+        console.log(result);
+      });
+    },
+    deleteBookingDate:function(){
+      return fetch("/api/booking", {
+        method:"DELETE",
+        headers: {"Content-type":"application/json;"},
+      }).then((response)=>{
+        return response.json();
+      }).then((result)=>{
+          this.bookingData = result;
+          // console.log(result);
+          // console.log("delete:" + result);
+        // console.log(this.loginData);
+      });
+    },
   }
 };
 //views
@@ -155,6 +202,7 @@ let views = {
     loginstatus.style.display = "block";
     if(models.loginData.name == false || models.loginData.password == false){
       loginstatus.innerHTML = "帳號或密碼不得為空";
+      loginstatus.style.color = "red";
     }
   },
   LoginStatus:function(){
@@ -163,9 +211,11 @@ let views = {
     if(models.loginData != null){
       if(models.loginData.error == true ){
         loginstatus.innerHTML = "登入失敗，帳號或密碼錯誤";
+        loginstatus.style.color = "red";//Fail變色
       }
       else{
         loginstatus.innerHTML = "登入成功";
+        loginstatus.style.color = "blue";
         window.location.reload(); // reload
       }
     }
@@ -173,6 +223,7 @@ let views = {
   renderRegisterValidation:function(){
     let registerstatus = document.querySelector(".register-status");
     registerstatus.style.display = "block";
+    registerstatus.style.color = "red";
     if(models.regsiterData.name == false){
       registerstatus.innerHTML = "姓名長度必須大於4";
     }
@@ -183,17 +234,29 @@ let views = {
       registerstatus.innerHTML = "密碼長度亦須大於6";
     }
   },
+  resetRegisterInput:function(){ //清空註冊表
+    let name = document.querySelector(".register-name");
+    let email = document.querySelector(".register-email");
+    let password = document.querySelector(".register-password");
+    name.value = "";
+    email.value ="";
+    password.value="";
+  },
   RegisterStatus:function(){
     let registerstatus = document.querySelector(".register-status");
     registerstatus.style.display = "block";
     if(models.regsiterData.error == true){
       registerstatus.innerHTML = "註冊失敗，電子信箱已被註冊";
+      registerstatus.style.color = "red";
     }
     else{
       if(models.regsiterData.ok == true){
         registerstatus.innerHTML = "註冊成功，請重新登入";
+        registerstatus.style.color = "blue";//提示色
+        views.resetRegisterInput();
       }
       else{
+        registerstatus.style.color = "red";
         if(models.regsiterData.name == false){
           registerstatus.innerHTML = "姓名必須大於4個字元";
         }else if (models.regsiterData.email == false) {
@@ -305,9 +368,10 @@ let views = {
 };
 //controller
 let controller = {
-  checkLogin:function(){
+  checkLogin:function(resolve){
     models.checkUserLogin().then(()=>{
       views.renderLogin();
+      resolve(true);
     });
   },
   userRegister:function(){
@@ -394,16 +458,80 @@ let controller = {
     });
 
   },
+  booking:{
+    judgeDate:function(date){
+      let today = Date.now();
+      let bookingDate = Date.parse(date);
+      // console.log(today,bookingDate);
+      if(bookingDate < today){
+        return false;
+      }else{
+        return true;
+      }
+    },
+    establishBooking:function(){
+      let booking_btn = document.querySelector(".booking-confirm");
+      booking_btn.addEventListener("click",()=>{
+        //not login
+        let login = document.querySelector(".nav-login");
+        if(login.innerHTML != "登出系統"){
+          views.showLogin();
+        }
+        else{ //logged in
+          let date, price, div;
+          date = document.querySelector(".booking-date-input").value;
+          price = document.querySelector(".total-fee").innerHTML;
+          if(date == "" || price == ""){ //input = null
+            div = document.querySelector(".booking-confirm-null");
+            div.style.display = "flex";
+          }
+          else if (this.judgeDate(date) == false) { // booking date 過期
+            div = document.querySelector(".booking-confirm-null");
+            div.style.display = "flex";
+            div.innerHTML = "所選日期已過，請重新選擇";
+          }
+          else{ //input ok
+            //deleteBooking
+            models.booking.deleteBookingDate().then(()=>{
+              //establishBooking
+              models.booking.establishBooking();
+              //redirect to booking page
+              window.location.replace("/booking");
+            });
+          }
+        }
+      });
+    },
+    viewBooking:function(){
+      let viewbooking_btn = document.querySelector(".nav-schedule");
+      viewbooking_btn.addEventListener("click",()=>{
+        //not login
+        let login = document.querySelector(".nav-login");
+        if(login.innerHTML != "登出系統"){
+          views.showLogin();
+        }
+        else{ //logged in => direct to /booking
+              window.location.replace("/booking");
+          }
+      });
+    },
+  },
   init:function(){
-    this.checkLogin();//check login session
-    models.getData().then(()=>{ //get product pic
-      views.renderData();
-      //login/register or cancel
-      controller.loginRegister();
-      controller.cancelLoginRegister();
-      // check login & logout
-      controller.userRegister(); // user register btn
-      controller.userLogin(); // user login btn
+    let p = new Promise(this.checkLogin);//check login session
+    p.then(()=>{
+      models.getData().then(()=>{ //get product pic
+        views.renderData();
+        //login/register or cancel
+        controller.loginRegister();
+        controller.cancelLoginRegister();
+        // check login & logout
+        controller.userRegister(); // user register btn
+        controller.userLogin(); // user login btn
+        //booking
+        controller.booking.establishBooking();
+        //view booking
+        controller.booking.viewBooking();
+      });
     });
   }
 }
