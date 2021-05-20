@@ -364,9 +364,9 @@ let views = {
       // time
       span = document.querySelector(".input-attraction-time");
       if(time=="morning"){
-        span.innerHTML = "早上九點到中午十二點";
+        span.innerHTML = "早上九點到下午四點";
       }else{
-        span.innerHTML = "下午一點到下午四點";
+        span.innerHTML = "下午二點到晚上九點";
       }
       // price
       span = document.querySelector(".input-attraction-price");
