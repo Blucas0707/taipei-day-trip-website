@@ -116,107 +116,21 @@ let models = {
       // console.log(result);
     });
   },
-  booking:{
-    bookingData:null,
-    bookingDeleted:null,
-    getBookingData:function(){
-      return fetch("/api/booking",{
-        method:"GET",
-        headers: {"Content-type":"application/json;"},
-      }).then((response)=>{
-        return response.json();
-      }).then((result)=>{
-          this.bookingData = result;
-          this.bookingDeleted = null;
-          // console.log(result);
-        // console.log(this.loginData);
-      });
-    },
-    deleteBookingDate:function(){
-      return fetch("api/booking", {
-        method:"DELETE",
-        headers: {"Content-type":"application/json;"},
-      }).then((response)=>{
-        return response.json();
-      }).then((result)=>{
-          this.bookingDeleted = result;
-          this.bookingData = null;
-          console.log(result);
-        // console.log(this.loginData);
-      });
-    },
-  },
   order:{
-    Prime:null,
     orderData:null,
-    establishOrder:function(){
-      //judge if can get Prime
-      if(TPDirect.card.getTappayFieldsStatus().canGetPrime==true){
-        //get Prime from TapPay
-        TPDirect.card.getPrime((result) => {
-            if (result.status !== 0) {
-                alert('get prime error ' + result.msg)
-                return
-            }
-            console.log('get prime 成功，prime: ' + result.card.prime);
-
-            this.Prime = result.card.prime;
-
-            let prime = result.card.prime;
-            let price = models.booking.bookingData.data.price;
-            let attractionId = models.booking.bookingData.data.attraction.id;
-            let attractionName = models.booking.bookingData.data.attraction.name;
-            let attractionAddress = models.booking.bookingData.data.attraction.address;
-            let attractionImage = models.booking.bookingData.data.attraction.image;
-            let date = models.booking.bookingData.data.date;
-            let time = models.booking.bookingData.data.time;
-            let name = models.loginData.data.name;
-            let email = models.loginData.data.email;
-            let phone = document.querySelector(".input-contact-phonenumber").value;
-
-            let data = {
-              "prime": prime,
-              "order": {
-                "price": price,
-                "trip": {
-                  "attraction": {
-                    "id": attractionId,
-                    "name": attractionName,
-                    "address": attractionAddress,
-                    "image": attractionImage
-                  },
-                  "date": date,
-                  "time": time
-                },
-                "contact": {
-                  "name": name,
-                  "email": email,
-                  "phone": phone
-                }
-              }
-            };
-            return fetch("/api/orders",{
-              method:"POST",
-              headers: {"Content-type":"application/json;"},
-              body: JSON.stringify(data)
-            }).then((response)=>{
-              return response.json();
-            }).then((result)=>{
-              this.orderData = result;
-              let order_number = result.data.number;
-              console.log(order_number);
-              window.location.replace("/thankyou?number=" + order_number);
-            });
-          });
-      }
-      else{ //can't get Prime
-        //need check card info
-        let primeFail = document.querySelector(".prime-fail");
-        primeFail.style.display = "flex";
-
-      }
-
-    },
+    getOrderData:function(){
+      let orderNumber = location.search.split("?number=")[1];
+      return fetch("/api/order/" + orderNumber ,{
+        method:'GET',
+        headers: {"Content-type":"application/json;"},
+      }).then((response)=>{
+        // console.log(response.json());
+        return response.json();
+      }).then((result)=>{
+        this.orderData = result;
+        console.log(result);
+      });
+    }
   },
 };
 //views
@@ -339,177 +253,24 @@ let views = {
     registerBox.style.display="none";  //隱藏register box
   },
   renderData: function() {
-    let greeting,username, email, attractionId, name, address, image, date, price, time, span, div;
-    // let checkdeleted = models.booking.bookingDeleted;
-    let dataexisted = models.booking.bookingData;
-    //greeting
-    username = models.loginData.data.name;
-    greeting = document.querySelector(".greeting");
-    greeting.innerHTML = "你好，" + username + "，待預訂的行程如下：";
-
-    if(dataexisted == null){ //no booking data
-      div = document.querySelector(".no-booking");
-      div.style.display = "flex";
-      div = document.querySelector(".attraction");
-      div.style.display = "None";
-      div = document.querySelector(".contact");
-      div.style.display = "None";
-      div = document.querySelector(".payment");
-      div.style.display = "None";
-      div = document.querySelector(".confirm");
-      div.style.display = "None";
-    }
-    else{ //booking data exist
-      let data = models.booking.bookingData.data;
-      image = data.attraction.image;
-      attractionId = data.attraction.id;
-      name = data.attraction.name;
-      address = data.attraction.address;
-      image = data.attraction.image;
-      date = data.date;
-      price = data.price;
-      time = data.time;
-
-      //input username
-      let input_name = document.querySelector(".input-contact-name");
-      input_name.value = username;
-      //input email
-      email = models.loginData.data.email;
-      let input_email = document.querySelector(".input-contact-email");
-      input_email.value = email;
-      // image
-      let img = document.querySelector(".attraction-img-pic");
-      img.src = image.toString();
-      // name
-      div = document.querySelector(".attraction-title");
-      div.innerHTML = name;
-      // date
-      span = document.querySelector(".input-attraction-date");
-      span.innerHTML = date;
-      // time
-      span = document.querySelector(".input-attraction-time");
-      if(time=="morning"){
-        span.innerHTML = "早上九點到下午四點";
-      }else{
-        span.innerHTML = "下午二點到晚上九點";
+      let greeting = document.querySelector(".greeting");
+      let paymentStatus = document.querySelector(".payment-status");
+      if(models.order.orderData != null){
+        greeting.innerHTML = "您好，" + models.order.orderData.data.contact.name +",";
+        paymentStatus.innerHTML ="訂單："+models.order.orderData.data.number+ " 已成立，請歡迎再次下訂！";
       }
-      // price
-      span = document.querySelector(".input-attraction-price");
-      span.innerHTML = price + " 元";
-      // address
-      span = document.querySelector(".input-attraction-address");
-      span.innerHTML = address;
-    }
-
-  },
-  initCard:function(){
-    var fields = {
-      number: {
-          // css selector
-          element: "#card-number",
-          placeholder: '**** **** **** ****'
-      },
-      expirationDate: {
-          // DOM object
-          element: "#card-expiration-date",
-          placeholder: 'MM / YY'
-      },
-      ccv: {
-          element: "#card-ccv",
-          placeholder: 'ccv'
-      },
-    };
-    // console.log(fields);
-    // console.log(fields.number.element.value,fields.expirationDate.element.value,fields.ccv.element.value);
-    //setup
-    TPDirect.card.setup({
-      fields:fields,
-      styles:{
-        // Style all elements
-        'input':{
-            'color':'gray',
-        },
-        // Styling ccv field
-        'input.ccv': {
-            // 'font-size': '16px'
-        },
-        // Styling expiration-date field
-        'input.expiration-date': {
-            // 'font-size': '16px'
-        },
-        // Styling card-number field
-        'input.card-number': {
-            // 'font-size': '16px'
-        },
-        // style focus state
-        ':focus': {
-            // 'color': 'black'
-        },
-        // style valid state
-        '.valid': {
-            'color': 'green'
-        },
-        // style invalid state
-        '.invalid': {
-            'color': 'red'
-        },
-        // Media queries
-        // Note that these apply to the iframe, not the root window.
-        // '@media screen and (max-width: 400px)': {
-        //     'input': {
-        //         'color': 'orange'
-        //     }
-        // }
-      },
-    });
-  },
+      else{
+        greeting.style.display = "None";
+        paymentStatus.innerHTML ="預定失敗，請重新下訂！";
+      }
+    },
 };
 
 
 //controller
 let controller = {
-  booking:{
-    deleteBooking:function(){
-      let deletebtn = document.querySelector(".delete-icon");
-      deletebtn.addEventListener("click",()=>{
-        models.booking.deleteBookingDate().then(()=>{
-          views.renderData();
-          // models.booking.getBookingData().then(()=>{ //delete booking ans and refresh
-          //   if(models.booking.bookingData == null){
-          //     views.renderData();
-          //   }
-          //   });
-        });
-      });
-    },
-    viewBooking:function(){
-      //init card info
-      views.initCard();
-
-      let viewbooking_btn = document.querySelector(".nav-schedule");
-      viewbooking_btn.addEventListener("click",()=>{
-        //not login
-        let login = document.querySelector(".nav-login");
-        if(login.innerHTML != "登出系統"){
-          views.showLogin();
-        }
-        else{ //logged in => direct to /booking
-          models.booking.getBookingData().then(()=>{ //get product pic
-            if(models.booking.bookingData == null){
-              views.renderData();
-              }
-            });
-          }
-      });
-    },
-  },
   order:{
-    establishOrder:function(){
-      let order_btn = document.querySelector(".confirm-btn");
-      order_btn.addEventListener("click",()=>{
-        models.order.establishOrder();
-      });
-    },
+
   },
   checkLogin:function(resolve){
     models.checkUserLogin().then(()=>{
@@ -565,10 +326,18 @@ let controller = {
     let backtologin = document.querySelector(".register-login"); // registerBox to loginBox
     backtologin.addEventListener("click",views.showLogin);
   },
+  booking:{
+    viewBooking:function(){
+      let viewbooking_btn = document.querySelector(".nav-schedule");
+      viewbooking_btn.addEventListener("click",()=>{
+        window.location.replace("/booking");
+      });
+    },
+  },
   init:function(){
     let p = new Promise(controller.checkLogin);
     p.then(()=>{
-      models.booking.getBookingData().then(()=>{ //get product pic
+      models.order.getOrderData().then(()=>{ //get product pic
         views.renderData();
         //login/register or cancel
         controller.loginRegister();
@@ -576,14 +345,10 @@ let controller = {
         // check login & logout
         controller.userRegister(); // user register btn
         controller.userLogin(); // user login btn
-        // check delete booking
-        controller.booking.deleteBooking();
         // view booking
         controller.booking.viewBooking();
-        // orders
-        controller.order.establishOrder();
       });
-    }); //check login session
+    });
 
   }
 }

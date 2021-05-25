@@ -10,7 +10,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
   <link rel="icon" href="../static/img/favicon.ico">
+  <script src="https://js.tappaysdk.com/tpdirect/v5.7.0"></script>
+  <script>
+    TPDirect.setupSDK(20400, 'app_sNtBi47xpPFbIlxmuRmt0bIST20mbZMNH7AKqZuM0RYBe7FNjQlCJkKbYJtQ', 'sandbox');
+  </script>
   <script src="../static/js/booking.js" async></script>
+
 </head>
 
 <body class="body">
@@ -95,17 +100,14 @@
     </div>
     <div class="payment">
       <div class="payment-title">信用卡付款資訊</div>
-      <form class="payment-info">
-        <div class="payment-cardnumber">卡片號碼：
-          <input class="input-payment-cardnumber" type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" maxlength="19" placeholder="**** **** **** ****" required>
-        </div>
-        <div class="payment-duedate">過期時間：
-          <input type="text" name="duedate" placeholder="MM / YY" class="input-payment-duedate" required>
-        </div>
-        <div class="payment-verification">驗證密碼：
-          <input type="text" name="verification" placeholder="CVV" class="input-payment-verification" required>
-        </div>
-      </form>
+
+      <div class="payment-info">
+        <span class="payment-text">卡片號碼：<div class="tpfield" id ="card-number"></div></span>
+        <span class="payment-text">過期時間：<div class="tpfield" id ="card-expiration-date"></div></span>
+        <span class="payment-text">驗證密碼：<div class="tpfield" id ="card-ccv"></div></span>
+        <div class="prime-fail">請確認付款資訊</div>
+      </div>
+
     </div>
     <div class="confirm">
       <div class="confirm-box">
