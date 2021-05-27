@@ -1,4 +1,5 @@
 from Model.SQL_order import *
+from Controller.api_tappay import *
 import json
 from flask import *
 from Controller.user_session import *
@@ -17,7 +18,8 @@ def get_api_orders():
         }
     else: #login
         data = request.get_json()
-        print(f"ordr data = {data}")
+        print(f"order data = {data}")
+        order_number = datetime.now().strftime("%Y%m%d%H%M%S")    #訂單編號
         prime = data["prime"]
         price = data["order"]["price"]
         attractionId = data["order"]["trip"]["attraction"]["id"]
@@ -29,27 +31,39 @@ def get_api_orders():
         name = data["order"]["contact"]["name"]
         email = data["order"]["contact"]["email"]
         phone = data["order"]["contact"]["phone"]
-        order_id = datetime.now().strftime("%Y%m%d%H%M%S")
-        print(order_id)
-        para = (prime,price,attractionId,attractionName,attractionAddress,attractionImage,date,time,name,email,phone,order_id)
-        #sql
+
+        # save into SQL
+        order_unpaid = 1 # unpaid
+        para = (
+            order_number, order_unpaid , price, attractionId, attractionName, attractionAddress, attractionImage, date, time, name,
+            email,phone)
+        # sql
         results = Order().establish_order(para)
-        if results == 200: #success
+
+        #Tappay
+        tappay = TapPay(data)
+        pay_result = tappay.Pay()
+        if pay_result: # success
             data_dict = {
               "data": {
-                "number": order_id,
+                "number": order_number,
                 "payment": {
                   "status": 0,
                   "message": "付款成功"
                 }
               }
             }
-        elif results == 500:
-            data_dict = {
-                "error": True,
-                "message": "Internal Server Error."
-            }
-        else:
+            #UPDATE SQL
+            para = (str(order_number),)
+            # sql
+            results = Order().update_payment(para)
+            print(f"UPDATE:{results}")
+            if results == 500:
+                data_dict = {
+                    "error": True,
+                    "message": "伺服器內部錯誤"
+                }
+        else: #pay fail
             data_dict = {
                 "error": True,
                 "message": "訂單建立失敗，輸入不正確或其他原因"
@@ -60,5 +74,20 @@ def get_api_orders():
 
 
 def get_api_orders_number(orderNumber):
-    pass
+    if getSession() == False:  # not login
+        data_dict = {
+            "error": True,
+            "message": "未登入系統，拒絕存取"
+        }
+    else:  # login
+        para = (str(orderNumber),)
+        result = Order().get_order(para)
+        if result == 500:
+            data_dict = {
+                "error": True,
+                "message": "伺服器內部錯誤"
+            }
+
+    jsonformat = json.dumps(result, indent=4, sort_keys=False)
+    return jsonformat
 
