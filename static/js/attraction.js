@@ -316,9 +316,9 @@ let views = {
       div.removeChild(div.firstChild);
     }
     //add new child for img order dot
-    for(let order = 0 ; order < this.images.length; order++){
+    for(let order = 0 ; order < views.images.length; order++){
       const li = document.createElement("li");
-      if(order == this.imageIndex){
+      if(order == views.imageIndex){
         li.className = "img-order-pick";
       }
       else{
@@ -327,15 +327,15 @@ let views = {
       div.appendChild(li);
     };
   },
-  renderData: function() {
-    let name, mrt, category, description, address, transport, images, div;
+  renderData: function(resolve) {
+    let name, mrt, category, description, address, transport, div;
     name = models.data.name;
     mrt = models.data.mrt;
     category = models.data.category;
     description = models.data.description;
     address = models.data.address;
     transport = models.data.transport;
-    this.images = models.data.images;
+    views.images = models.data.images;
     // location
     div = document.querySelector(".name");
     div.textContent = name;
@@ -355,14 +355,30 @@ let views = {
     div = document.querySelector(".img");
     const img = document.createElement("img");
     img.className = "img-pic";
-    img.src = this.images[this.imageIndex];
+    img.src = views.images[views.imageIndex];
     div.appendChild(img);
     //show img order dot
-    this.renderImageorder();
-
+    views.renderImageorder();
+    //
     // choose package;
     controller.choosePackage();
+
+    //img click
     controller.clickImage();
+
+    resolve(true);
+  },
+  isloaded:function(){
+    console.log("isloaded");
+    // non-display loading img
+    let loading = document.querySelector(".loading");
+    loading.style.display = "none";
+    //display main content
+    let product = document.querySelector(".product");
+    let description = document.querySelector(".description");
+    product.style.display = "flex";
+    description.style.display = "block";
+
   },
 
 };
@@ -520,7 +536,12 @@ let controller = {
     let p = new Promise(this.checkLogin);//check login session
     p.then(()=>{
       models.getData().then(()=>{ //get product pic
-        views.renderData();
+        let r = new Promise(views.renderData);
+        r.then(()=>{
+          console.log("loaded");
+          // isloaded
+          views.isloaded();
+        });
         //login/register or cancel
         controller.loginRegister();
         controller.cancelLoginRegister();

@@ -219,9 +219,14 @@ main {
   margin: auto;
 }
 
-/* .main-body {
+.loading {
+  display: flex;
+  justify-content: center;
+}
+
+.loaded {
   display: none;
-} */
+}
 
 footer {
   display: flex;
@@ -389,19 +394,33 @@ input {
   color: #666666;
 }
 
-.contact-remider {
+.contact-reminder {
   height: 14px;
   /* Body - Bold 16(13.3) */
   font-family: Noto Sans TC;
   font-style: normal;
   font-weight: bold;
   font-size: 16px;
-  line-height: 13px;
+  line-height: 30px;
   /* identical to box height, or 83% */
   display: flex;
   align-items: center;
   /* Gray 800 */
   color: #666666;
+  margin: 30px 0;
+}
+
+.info-fail {
+  font-family: Noto Sans TC;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 13px;
+  /* or 83% */
+  display: none;
+  align-items: center;
+  /* Gray 800 */
+  color: red;
 }
 
 /* payment */

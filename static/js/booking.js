@@ -338,7 +338,7 @@ let views = {
     let registerBox = document.querySelector(".register-box");
     registerBox.style.display="none";  //隱藏register box
   },
-  renderData: function() {
+  renderData: function(resolve) {
     let greeting,username, email, attractionId, name, address, image, date, price, time, span, div;
     // let checkdeleted = models.booking.bookingDeleted;
     let dataexisted = models.booking.bookingData;
@@ -401,6 +401,13 @@ let views = {
       span.innerHTML = address;
     }
 
+    resolve(true);
+  },
+  isloaded:function(){
+    let loading = document.querySelector(".loading");
+    let loaded = document.querySelector(".loaded");
+    loading.style.display = "none";
+    loaded.style.display = "block";
   },
   initCard:function(){
     var fields = {
@@ -507,9 +514,30 @@ let controller = {
     establishOrder:function(){
       let order_btn = document.querySelector(".confirm-btn");
       order_btn.addEventListener("click",()=>{
-        models.order.establishOrder();
+        let isInfoNull = new Promise(controller.isInfoNull);
+        isInfoNull.then(()=>{
+          models.order.establishOrder();
+        });
+
       });
     },
+  },
+  isInfoNull:function(resolve){
+    let nameInput = document.querySelector(".input-contact-name").value.replace(/\s*/g,""); //去除空白
+    let emailUnput = document.querySelector(".input-contact-email").value.replace(/\s*/g,""); //去除空白
+    let phoneInput = document.querySelector(".input-contact-phonenumber").value.replace(/\s*/g,""); //去除空白
+    let confirm = document.querySelector(".info-fail");
+
+    if(nameInput == "" || emailUnput == "" || phoneInput == ""){
+      confirm.style.display = "flex";
+    }
+    else if(phoneInput.search(/^09\d{8}$/) != 0){ //phone format error
+      confirm.style.display = "flex";
+    }
+    else{
+      confirm.style.display = "none";
+      resolve(true);
+    }
   },
   checkLogin:function(resolve){
     models.checkUserLogin().then(()=>{
@@ -569,7 +597,10 @@ let controller = {
     let p = new Promise(controller.checkLogin);
     p.then(()=>{
       models.booking.getBookingData().then(()=>{ //get product pic
-        views.renderData();
+        let render = new Promise(views.renderData);
+        render.then(()=>{
+          views.isloaded();
+        });
         //login/register or cancel
         controller.loginRegister();
         controller.cancelLoginRegister();

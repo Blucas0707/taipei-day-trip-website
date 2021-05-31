@@ -38,7 +38,6 @@ class TapPay:
             "x-api-key": config["TAPPAY_partner_key"]
         }
 
-
         req = requests.post(url = self.url,
                  headers=my_headers,
                  data=encoded_body)

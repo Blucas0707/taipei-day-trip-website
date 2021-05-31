@@ -65,56 +65,63 @@
     </div>
   </div>
   <main class="main-body">
-    <div class="greeting"></div>
-    <div class="no-booking">目前沒有任何待預訂的行程</div>
-    <div class="attraction">
-      <div class="attraction-info">
-        <div class="attraction-img"><img src="" alt="" class="attraction-img-pic"></div>
-        <div class="attraction-Content">
-          <div class="attraction-title"></div>
-          <div class="attraction-date">日期：<span class="input-attraction-date"></span></div>
-          <div class="attraction-time">時間：<span class="input-attraction-time"></span></div>
-          <div class="attraction-price">費用：新台幣 <span class="input-attraction-price"></span></div>
-          <div class="attraction-address">地點：<span class="input-attraction-address"></span></div>
+    <div class="loading">
+      <img src="../static/img/loading.gif" alt="">
+    </div>
+    <div class="loaded">
+      <div class="greeting"></div>
+      <div class="no-booking">目前沒有任何待預訂的行程</div>
+      <div class="attraction">
+        <div class="attraction-info">
+          <div class="attraction-img"><img src="" alt="" class="attraction-img-pic"></div>
+          <div class="attraction-Content">
+            <div class="attraction-title"></div>
+            <div class="attraction-date">日期：<span class="input-attraction-date"></span></div>
+            <div class="attraction-time">時間：<span class="input-attraction-time"></span></div>
+            <div class="attraction-price">費用：新台幣 <span class="input-attraction-price"></span></div>
+            <div class="attraction-address">地點：<span class="input-attraction-address"></span></div>
+          </div>
+          <div class="delete-icon"><img src="../static/img/icon_delete.svg" alt="" class="delete-icon-img-pic"></div>
         </div>
-        <div class="delete-icon"><img src="../static/img/icon_delete.svg" alt="" class="delete-icon-img-pic"></div>
       </div>
-    </div>
-    <div class="contact">
-      <div class="contact-title">您的聯絡資訊</div>
-      <form class="contact-info">
-        <!-- 聯絡姓名：<input type="text" name="name" value="" class="input-contact-name" required>
-        聯絡信箱：<input type="text" name="email" value="" class="input-contact-email" required>
-        手機號碼：<input type="text" name="phonenumber" value="" class="input-contact-phonenumber" required> -->
-        <div class="contact-name">聯絡姓名：
-          <input type="text" name="name" value="" class="input-contact-name" required>
-        </div>
-        <div class="contact-email">聯絡信箱：
-          <input type="text" name="email" value="" class="input-contact-email" required>
-        </div>
-        <div class="contact-phonenumber">手機號碼：
-          <input type="text" name="phonenumber" value="" class="input-contact-phonenumber" required>
-        </div>
-      </form>
-      <div class="contact-remider">請保持手機暢通，準時到達，導覽人員將用手機與您聯絡，務必留下正確的聯絡方式。</div>
-    </div>
-    <div class="payment">
-      <div class="payment-title">信用卡付款資訊</div>
+      <div class="contact">
+        <div class="contact-title">您的聯絡資訊</div>
+        <form class="contact-info">
+          <!-- 聯絡姓名：<input type="text" name="name" value="" class="input-contact-name" required>
+          聯絡信箱：<input type="text" name="email" value="" class="input-contact-email" required>
+          手機號碼：<input type="text" name="phonenumber" value="" class="input-contact-phonenumber" required> -->
+          <div class="contact-name">聯絡姓名：
+            <input type="text" name="name" value="" class="input-contact-name" required>
+          </div>
+          <div class="contact-email">聯絡信箱：
+            <input type="text" name="email" value="" class="input-contact-email" required>
+          </div>
+          <div class="contact-phonenumber">手機號碼：
+            <input type="tel" name="phonenumber" value="" class="input-contact-phonenumber" placeholder="0912345678" minlength="10" maxlength="10" required>
+          </div>
+        </form>
+        <div class="contact-reminder">請保持手機暢通，準時到達，導覽人員將用手機與您聯絡，務必留下正確的聯絡方式。</div>
+        <div class="info-fail">請確認聯絡資訊</div>
+      </div>
+      <div class="payment">
+        <div class="payment-title">信用卡付款資訊</div>
 
-      <div class="payment-info">
-        <span class="payment-text">卡片號碼：<div class="tpfield" id ="card-number"></div></span>
-        <span class="payment-text">過期時間：<div class="tpfield" id ="card-expiration-date"></div></span>
-        <span class="payment-text">驗證密碼：<div class="tpfield" id ="card-ccv"></div></span>
-        <div class="prime-fail">請確認付款資訊</div>
-      </div>
+        <div class="payment-info">
+          <span class="payment-text">卡片號碼：<div class="tpfield" id ="card-number"></div></span>
+          <span class="payment-text">過期時間：<div class="tpfield" id ="card-expiration-date"></div></span>
+          <span class="payment-text">驗證密碼：<div class="tpfield" id ="card-ccv"></div></span>
+          <div class="prime-fail">請確認付款資訊</div>
+        </div>
 
-    </div>
-    <div class="confirm">
-      <div class="confirm-box">
-        <div class="confirm-price">總價：新台幣2000元</div>
-        <div class="confirm-btn">確認訂購並付款</div>
+      </div>
+      <div class="confirm">
+        <div class="confirm-box">
+          <div class="confirm-price">總價：新台幣2000元</div>
+          <div class="confirm-btn">確認訂購並付款</div>
+        </div>
       </div>
     </div>
+
   </main>
 
   <footer class="copyright" id="footer">COPYRIGHT &copy;2021 台北一日遊</footer>
