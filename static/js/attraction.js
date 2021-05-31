@@ -155,7 +155,7 @@ let models = {
       }).then((result)=>{
         this.bookingData = result;
         // console.log(this.bookingData);
-        console.log(result);
+        // console.log(result);
       });
     },
     deleteBookingDate:function(){
@@ -188,7 +188,7 @@ let views = {
         views.isFadeout = false;
         num -= speed;
         main.style.opacity = (num / 1000);
-        console.log(main.style.opacity);
+        // console.log(main.style.opacity);
         if(num <= 0){
           clearInterval(timer);
           views.isFadeout = true;
@@ -204,7 +204,7 @@ let views = {
       views.isFadein = false;
       num += speed;
       main.style.opacity = (num / 1000);
-      console.log(main.style.opacity);
+      // console.log(main.style.opacity);
       if(num >= 1000){
         clearInterval(timer);
         views.isFadein = true;
@@ -406,7 +406,7 @@ let views = {
     resolve(true);
   },
   isloaded:function(){
-    console.log("isloaded");
+    // console.log("isloaded");
     // non-display loading img
     let loading = document.querySelector(".loading");
     loading.style.display = "none";
@@ -579,7 +579,7 @@ let controller = {
       models.getData().then(()=>{ //get product pic
         let r = new Promise(views.renderData);
         r.then(()=>{
-          console.log("loaded");
+          // console.log("loaded");
           // isloaded
           views.isloaded();
         });

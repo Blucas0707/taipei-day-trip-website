@@ -128,7 +128,7 @@ let models = {
         return response.json();
       }).then((result)=>{
         this.orderData = result;
-        console.log(result);
+        // console.log(result);
       });
     }
   },
@@ -145,7 +145,7 @@ let views = {
         views.isFadeout = false;
         num -= speed;
         main.style.opacity = (num / 1000);
-        console.log(main.style.opacity);
+        // console.log(main.style.opacity);
         if(num <= 0){
           clearInterval(timer);
           views.isFadeout = true;
@@ -161,7 +161,7 @@ let views = {
       views.isFadein = false;
       num += speed;
       main.style.opacity = (num / 1000);
-      console.log(main.style.opacity);
+      // console.log(main.style.opacity);
       if(num >= 1000){
         clearInterval(timer);
         views.isFadein = true;

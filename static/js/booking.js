@@ -27,7 +27,7 @@ let models = {
     }).then((result)=>{
       this.loginData = result;
       this.logoutData = null;
-      console.log(this.loginData);
+      // console.log(this.loginData);
     });
   },
   validateRegister:function(){
@@ -158,7 +158,7 @@ let models = {
                 alert('get prime error ' + result.msg)
                 return
             }
-            console.log('get prime 成功，prime: ' + result.card.prime);
+            // console.log('get prime 成功，prime: ' + result.card.prime);
 
             this.Prime = result.card.prime;
 
@@ -236,7 +236,7 @@ let views = {
         views.isFadeout = false;
         num -= speed;
         main.style.opacity = (num / 1000);
-        console.log(main.style.opacity);
+        // console.log(main.style.opacity);
         if(num <= 0){
           clearInterval(timer);
           views.isFadeout = true;
@@ -252,7 +252,7 @@ let views = {
       views.isFadein = false;
       num += speed;
       main.style.opacity = (num / 1000);
-      console.log(main.style.opacity);
+      // console.log(main.style.opacity);
       if(num >= 1000){
         clearInterval(timer);
         views.isFadein = true;
