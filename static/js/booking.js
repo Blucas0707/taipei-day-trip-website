@@ -205,7 +205,12 @@ let models = {
               this.orderData = result;
               let order_number = result.data.number;
               console.log(order_number);
-              window.location.replace("/thankyou?number=" + order_number);
+              //fade out
+              let fadeout = new Promise(views.fadeout);
+              fadeout.then(()=>{
+                //redirect to thankyou page
+                window.location.replace("/thankyou?number=" + order_number);
+              });
             });
           });
       }
@@ -224,7 +229,7 @@ let views = {
   isFadeout:false,
   isFadein:false,
   fadeout:function(resolve){
-    let main = document.querySelector(".main-body");
+    let main = document.querySelector("html");
     let speed = 10;
     let num = 100;
       let timer = setInterval(()=>{
@@ -239,21 +244,20 @@ let views = {
         }
       },30);
   },
-  fadein:function(){
-    let main = document.querySelector(".main-body");
+  fadein:function(resolve){
+    let main = document.querySelector("html");
     let speed = 10;
     let num = 0;
-      let timer = setInterval(()=>{
-        views.isFadein = false;
-        num += speed;
-        main.style.opacity = (num / 100);
-        console.log(main.style.opacity);
-        if(num >= 210){
-          clearInterval(timer);
-          views.isFadein = true;
-          resolve(true);
-        }
-      },50);
+    let timer = setInterval(()=>{
+      views.isFadein = false;
+      num += speed;
+      main.style.opacity = (num / 1000);
+      console.log(main.style.opacity);
+      if(num >= 1000){
+        clearInterval(timer);
+        views.isFadein = true;
+      }
+    },10);
   },
   renderLogout:function(){
     let navLogin = document.querySelector(".nav-login");

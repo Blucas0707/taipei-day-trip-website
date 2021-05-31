@@ -2,6 +2,9 @@
   margin: 0;
   padding: 0;
 }
+html {
+  opacity: 0;
+}
 
 a, a:link, a:visited {
   color: #438899;

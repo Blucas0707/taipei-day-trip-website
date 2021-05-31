@@ -213,8 +213,12 @@ a, a:link, a:visited {
   line-height: 13px;
   color: #666666;
 } */
-main {
+
+html {
   opacity: 0;
+}
+
+main {
   padding-top: 54px;
   max-width: 1200px;
   margin: auto;

@@ -205,9 +205,11 @@ a,a:link,a:visited {
   color: #666666;
 } */
 
+html {
+  opacity: 0;
+}
 
 main {
-  opacity: 0;
   padding-top: 54px;
   max-width: 1200px;
   margin: auto;

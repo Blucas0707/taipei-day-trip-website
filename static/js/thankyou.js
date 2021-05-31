@@ -135,6 +135,39 @@ let models = {
 };
 //views
 let views = {
+  isFadeout:false,
+  isFadein:false,
+  fadeout:function(resolve){
+    let main = document.querySelector("html");
+    let speed = 10;
+    let num = 100;
+      let timer = setInterval(()=>{
+        views.isFadeout = false;
+        num -= speed;
+        main.style.opacity = (num / 100);
+        console.log(main.style.opacity);
+        if(num <= -60){
+          clearInterval(timer);
+          views.isFadeout = true;
+          resolve(true);
+        }
+      },30);
+  },
+  fadein:function(resolve){
+    let main = document.querySelector("html");
+    let speed = 10;
+    let num = 0;
+    let timer = setInterval(()=>{
+      views.isFadein = false;
+      num += speed;
+      main.style.opacity = (num / 1000);
+      console.log(main.style.opacity);
+      if(num >= 1000){
+        clearInterval(timer);
+        views.isFadein = true;
+      }
+    },10);
+  },
   renderLogout:function(){
     let navLogin = document.querySelector(".nav-login");
     let navLogout = document.querySelector(".nav-logout");
@@ -253,17 +286,19 @@ let views = {
     registerBox.style.display="none";  //隱藏register box
   },
   renderData: function() {
-      let greeting = document.querySelector(".greeting");
-      let paymentStatus = document.querySelector(".payment-status");
-      if(models.order.orderData != null){
-        greeting.innerHTML = "您好，" + models.order.orderData.data.contact.name +",";
-        paymentStatus.innerHTML ="訂單："+models.order.orderData.data.number+ " 已成立，請歡迎再次下訂！";
-      }
-      else{
-        greeting.style.display = "None";
-        paymentStatus.innerHTML ="預定失敗，請重新下訂！";
-      }
-    },
+    //fade in
+    views.fadein();
+    let greeting = document.querySelector(".greeting");
+    let paymentStatus = document.querySelector(".payment-status");
+    if(models.order.orderData != null){
+      greeting.innerHTML = "您好，" + models.order.orderData.data.contact.name +",";
+      paymentStatus.innerHTML ="訂單："+models.order.orderData.data.number+ " 已成立，請歡迎再次下訂！";
+    }
+    else{
+      greeting.style.display = "None";
+      paymentStatus.innerHTML ="預定失敗，請重新下訂！";
+    }
+  },
 };
 
 
