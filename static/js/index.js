@@ -142,12 +142,46 @@ let models={
 //views
 let views={
   need_scrolldown:true,
+  isFadeout:false,
+  isFadein:false,
   clear:function(){
     let img = document.querySelector(".image-gallery");
     while (img.firstChild) {
       img.removeChild(img.firstChild);
     }
     models.nextPage = 0;
+  },
+  fadeout:function(resolve){
+    let main = document.querySelector(".main");
+    let speed = 10;
+    let num = 100;
+      let timer = setInterval(()=>{
+        views.isFadeout = false;
+        num -= speed;
+        main.style.opacity = (num / 100);
+        console.log(main.style.opacity);
+        if(num <= -60){
+          clearInterval(timer);
+          views.isFadeout = true;
+          resolve(true);
+        }
+      },30);
+  },
+  fadein:function(){
+    let main = document.querySelector(".main");
+    let speed = 10;
+    let num = 0;
+      let timer = setInterval(()=>{
+        views.isFadein = false;
+        num += speed;
+        main.style.opacity = (num / 100);
+        console.log(main.style.opacity);
+        if(num >= 210){
+          clearInterval(timer);
+          views.isFadein = true;
+          resolve(true);
+        }
+      },50);
   },
   renderLogout:function(){
     let navLogin = document.querySelector(".nav-login");
@@ -363,6 +397,8 @@ let views={
       body.appendChild(div);
       document.querySelector(".nodata").innerHTML = "此次搜尋，沒有結果";
     }
+    //fadein
+    views.fadein();
     //click img
     controller.imgClick();
     //keyword search
@@ -433,7 +469,12 @@ let controller={
     for(let i = 0;i<imgs.length;i++){
       let url = "/attraction/" + imgs[i].id;
       imgs[i].addEventListener("click", function(e){
-        window.location.replace(url);
+        let fade = new Promise(views.fadeout);
+
+        fade.then(()=>{
+          window.location.replace(url);
+        });
+
       });
     }
   },
@@ -460,7 +501,8 @@ let controller={
         views.showLogin();
       }
       else{ //logged in => direct to /booking
-            window.location.replace("/booking");
+          views.fadeout();
+          window.location.replace("/booking");
         }
     });
   },

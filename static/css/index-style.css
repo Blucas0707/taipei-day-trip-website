@@ -198,7 +198,9 @@ a,a:link,a:visited {
   line-height: 13px;
   color: #666666;
 } */
-
+.main {
+  opacity: 0;
+}
 .cover {
   padding-top:54px;
   display: flex;

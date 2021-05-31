@@ -207,6 +207,7 @@ a,a:link,a:visited {
 
 
 main {
+  opacity: 0;
   padding-top: 54px;
   max-width: 1200px;
   margin: auto;
@@ -214,6 +215,8 @@ main {
 
 .loading {
   display: flex;
+  width: 200px;
+  margin:auto;
 }
 
 .product {

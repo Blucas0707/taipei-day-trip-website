@@ -178,6 +178,40 @@ let views = {
   need_scrolldown:true,
   images:null,
   imageIndex:0,
+  isFadeout:false,
+  isFadein:false,
+  fadeout:function(resolve){
+    let main = document.querySelector(".main");
+    let speed = 10;
+    let num = 100;
+      let timer = setInterval(()=>{
+        views.isFadeout = false;
+        num -= speed;
+        main.style.opacity = (num / 100);
+        console.log(main.style.opacity);
+        if(num <= -60){
+          clearInterval(timer);
+          views.isFadeout = true;
+          resolve(true);
+        }
+      },30);
+  },
+  fadein:function(){
+    let main = document.querySelector(".main");
+    let speed = 10;
+    let num = 0;
+      let timer = setInterval(()=>{
+        views.isFadein = false;
+        num += speed;
+        main.style.opacity = (num / 100);
+        console.log(main.style.opacity);
+        if(num >= 210){
+          clearInterval(timer);
+          views.isFadein = true;
+          resolve(true);
+        }
+      },50);
+  },
   renderLogout:function(){
     let navLogin = document.querySelector(".nav-login");
     let navLogout = document.querySelector(".nav-logout");
@@ -357,6 +391,9 @@ let views = {
     img.className = "img-pic";
     img.src = views.images[views.imageIndex];
     div.appendChild(img);
+    //fadein
+    views.fadein();
+
     //show img order dot
     views.renderImageorder();
     //

@@ -214,6 +214,7 @@ a, a:link, a:visited {
   color: #666666;
 } */
 main {
+  opacity: 0;
   padding-top: 54px;
   max-width: 1200px;
   margin: auto;
@@ -221,7 +222,8 @@ main {
 
 .loading {
   display: flex;
-  justify-content: center;
+  width: 200px;
+  margin:auto;
 }
 
 .loaded {
