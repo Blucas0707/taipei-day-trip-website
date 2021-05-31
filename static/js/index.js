@@ -154,18 +154,18 @@ let views={
   fadeout:function(resolve){
     let main = document.querySelector("html");
     let speed = 10;
-    let num = 100;
+    let num = 1000;
       let timer = setInterval(()=>{
         views.isFadeout = false;
         num -= speed;
-        main.style.opacity = (num / 100);
+        main.style.opacity = (num / 1000);
         console.log(main.style.opacity);
-        if(num <= -60){
+        if(num <= 0){
           clearInterval(timer);
           views.isFadeout = true;
           resolve(true);
         }
-      },30);
+      },10);
   },
   fadein:function(resolve){
     let main = document.querySelector("html");
@@ -397,8 +397,6 @@ let views={
       body.appendChild(div);
       document.querySelector(".nodata").innerHTML = "此次搜尋，沒有結果";
     }
-    //fadein
-    views.fadein();
     //click img
     controller.imgClick();
     //keyword search
@@ -510,6 +508,9 @@ let controller={
     let p = new Promise(this.checkLogin);//check login session
     p.then(()=>{
       models.getProductData().then(()=>{ //get product pic
+        //fadein
+        views.fadein();
+
         views.renderData();
         //login/register or cancel
         controller.loginRegister();
