@@ -27,7 +27,7 @@ let models = {
     }).then((result)=>{
       this.loginData = result;
       this.logoutData = null;
-      console.log(this.loginData);
+      // console.log(this.loginData);
     });
   },
   validateRegister:function(){
@@ -158,7 +158,7 @@ let models = {
                 alert('get prime error ' + result.msg)
                 return
             }
-            console.log('get prime 成功，prime: ' + result.card.prime);
+            // console.log('get prime 成功，prime: ' + result.card.prime);
 
             this.Prime = result.card.prime;
 
@@ -205,7 +205,12 @@ let models = {
               this.orderData = result;
               let order_number = result.data.number;
               console.log(order_number);
-              window.location.replace("/thankyou?number=" + order_number);
+              //fade out
+              let fadeout = new Promise(views.fadeout);
+              fadeout.then(()=>{
+                //redirect to thankyou page
+                window.location.replace("/thankyou?number=" + order_number);
+              });
             });
           });
       }
@@ -221,6 +226,39 @@ let models = {
 };
 //views
 let views = {
+  isFadeout:false,
+  isFadein:false,
+  fadeout:function(resolve){
+    let main = document.querySelector("html");
+    let speed = 10;
+    let num = 1000;
+      let timer = setInterval(()=>{
+        views.isFadeout = false;
+        num -= speed;
+        main.style.opacity = (num / 1000);
+        // console.log(main.style.opacity);
+        if(num <= 0){
+          clearInterval(timer);
+          views.isFadeout = true;
+          resolve(true);
+        }
+      },10);
+  },
+  fadein:function(resolve){
+    let main = document.querySelector("html");
+    let speed = 10;
+    let num = 0;
+    let timer = setInterval(()=>{
+      views.isFadein = false;
+      num += speed;
+      main.style.opacity = (num / 1000);
+      // console.log(main.style.opacity);
+      if(num >= 1000){
+        clearInterval(timer);
+        views.isFadein = true;
+      }
+    },10);
+  },
   renderLogout:function(){
     let navLogin = document.querySelector(".nav-login");
     let navLogout = document.querySelector(".nav-logout");
@@ -338,7 +376,7 @@ let views = {
     let registerBox = document.querySelector(".register-box");
     registerBox.style.display="none";  //隱藏register box
   },
-  renderData: function() {
+  renderData: function(resolve) {
     let greeting,username, email, attractionId, name, address, image, date, price, time, span, div;
     // let checkdeleted = models.booking.bookingDeleted;
     let dataexisted = models.booking.bookingData;
@@ -400,7 +438,15 @@ let views = {
       span = document.querySelector(".input-attraction-address");
       span.innerHTML = address;
     }
-
+    //fade in
+    views.fadein();
+    resolve(true);
+  },
+  isloaded:function(){
+    let loading = document.querySelector(".loading");
+    let loaded = document.querySelector(".loaded");
+    loading.style.display = "none";
+    loaded.style.display = "block";
   },
   initCard:function(){
     var fields = {
@@ -507,9 +553,30 @@ let controller = {
     establishOrder:function(){
       let order_btn = document.querySelector(".confirm-btn");
       order_btn.addEventListener("click",()=>{
-        models.order.establishOrder();
+        let isInfoNull = new Promise(controller.isInfoNull);
+        isInfoNull.then(()=>{
+          models.order.establishOrder();
+        });
+
       });
     },
+  },
+  isInfoNull:function(resolve){
+    let nameInput = document.querySelector(".input-contact-name").value.replace(/\s*/g,""); //去除空白
+    let emailUnput = document.querySelector(".input-contact-email").value.replace(/\s*/g,""); //去除空白
+    let phoneInput = document.querySelector(".input-contact-phonenumber").value.replace(/\s*/g,""); //去除空白
+    let confirm = document.querySelector(".info-fail");
+
+    if(nameInput == "" || emailUnput == "" || phoneInput == ""){
+      confirm.style.display = "flex";
+    }
+    else if(phoneInput.search(/^09\d{8}$/) != 0){ //phone format error
+      confirm.style.display = "flex";
+    }
+    else{
+      confirm.style.display = "none";
+      resolve(true);
+    }
   },
   checkLogin:function(resolve){
     models.checkUserLogin().then(()=>{
@@ -569,7 +636,10 @@ let controller = {
     let p = new Promise(controller.checkLogin);
     p.then(()=>{
       models.booking.getBookingData().then(()=>{ //get product pic
-        views.renderData();
+        let render = new Promise(views.renderData);
+        render.then(()=>{
+          views.isloaded();
+        });
         //login/register or cancel
         controller.loginRegister();
         controller.cancelLoginRegister();

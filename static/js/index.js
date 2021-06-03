@@ -142,12 +142,46 @@ let models={
 //views
 let views={
   need_scrolldown:true,
+  isFadeout:false,
+  isFadein:false,
   clear:function(){
     let img = document.querySelector(".image-gallery");
     while (img.firstChild) {
       img.removeChild(img.firstChild);
     }
     models.nextPage = 0;
+  },
+  fadeout:function(resolve){
+    let main = document.querySelector("html");
+    let speed = 10;
+    let num = 1000;
+      let timer = setInterval(()=>{
+        views.isFadeout = false;
+        num -= speed;
+        main.style.opacity = (num / 1000);
+        // console.log(main.style.opacity);
+        if(num <= 0){
+          clearInterval(timer);
+          views.isFadeout = true;
+          resolve(true);
+        }
+      },10);
+  },
+  fadein:function(resolve){
+    let main = document.querySelector("html");
+    let speed = 10;
+    let num = 0;
+    let timer = setInterval(()=>{
+      views.isFadein = false;
+      num += speed;
+      main.style.opacity = (num / 1000);
+      // console.log(main.style.opacity);
+      if(num >= 1000){
+        clearInterval(timer);
+        views.isFadein = true;
+        // resolve(true);
+      }
+    },10);
   },
   renderLogout:function(){
     let navLogin = document.querySelector(".nav-login");
@@ -433,7 +467,12 @@ let controller={
     for(let i = 0;i<imgs.length;i++){
       let url = "/attraction/" + imgs[i].id;
       imgs[i].addEventListener("click", function(e){
-        window.location.replace(url);
+        let fade = new Promise(views.fadeout);
+
+        fade.then(()=>{
+          window.location.replace(url);
+        });
+
       });
     }
   },
@@ -460,7 +499,8 @@ let controller={
         views.showLogin();
       }
       else{ //logged in => direct to /booking
-            window.location.replace("/booking");
+          views.fadeout();
+          window.location.replace("/booking");
         }
     });
   },
@@ -468,6 +508,9 @@ let controller={
     let p = new Promise(this.checkLogin);//check login session
     p.then(()=>{
       models.getProductData().then(()=>{ //get product pic
+        //fadein
+        views.fadein();
+
         views.renderData();
         //login/register or cancel
         controller.loginRegister();

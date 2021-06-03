@@ -1,6 +1,6 @@
 from Model.SQL import SQLDB
 import json
-import hashlib
+from datetime import datetime
 from flask import *
 from Controller.user_session import *
 from dotenv import dotenv_values
@@ -77,6 +77,12 @@ def establish_booking_info():
         price = data["price"]
         print(email,attractionid, date, time, price)
         if None in [email,attractionid, date, time, price]:  # null in input
+            data_dict = {
+                "error": True,
+                "message": "輸入不正確，請重新輸入"
+            }
+        elif date < datetime.now().strftime("%Y-%m-%d"):
+            #date < now
             data_dict = {
                 "error": True,
                 "message": "輸入不正確，請重新輸入"

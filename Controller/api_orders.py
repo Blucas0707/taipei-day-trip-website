@@ -32,42 +32,48 @@ def get_api_orders():
         email = data["order"]["contact"]["email"]
         phone = data["order"]["contact"]["phone"]
 
-        # save into SQL
-        order_unpaid = 1 # unpaid
-        para = (
-            order_number, order_unpaid , price, attractionId, attractionName, attractionAddress, attractionImage, date, time, name,
-            email,phone)
-        # sql
-        results = Order().establish_order(para)
-
-        #Tappay
-        tappay = TapPay(data)
-        pay_result = tappay.Pay()
-        if pay_result: # success
-            data_dict = {
-              "data": {
-                "number": order_number,
-                "payment": {
-                  "status": 0,
-                  "message": "付款成功"
-                }
-              }
-            }
-            #UPDATE SQL
-            para = (str(order_number),)
-            # sql
-            results = Order().update_payment(para)
-            print(f"UPDATE:{results}")
-            if results == 500:
-                data_dict = {
-                    "error": True,
-                    "message": "伺服器內部錯誤"
-                }
-        else: #pay fail
+        if name == "" or email == "" or phone == "": #contact info null
             data_dict = {
                 "error": True,
                 "message": "訂單建立失敗，輸入不正確或其他原因"
             }
+        else:
+            # save into SQL
+            order_unpaid = 1 # unpaid
+            para = (
+                order_number, order_unpaid , price, attractionId, attractionName, attractionAddress, attractionImage, date, time, name,
+                email,phone)
+            # sql
+            results = Order().establish_order(para)
+
+            #Tappay
+            tappay = TapPay(data)
+            pay_result = tappay.Pay()
+            if pay_result: # success
+                data_dict = {
+                  "data": {
+                    "number": order_number,
+                    "payment": {
+                      "status": 0,
+                      "message": "付款成功"
+                    }
+                  }
+                }
+                #UPDATE SQL
+                para = (str(order_number),)
+                # sql
+                results = Order().update_payment(para)
+                print(f"UPDATE:{results}")
+                if results == 500:
+                    data_dict = {
+                        "error": True,
+                        "message": "伺服器內部錯誤"
+                    }
+            else: #pay fail
+                data_dict = {
+                    "error": True,
+                    "message": "訂單建立失敗，輸入不正確或其他原因"
+                }
 
     jsonformat = json.dumps(data_dict, sort_keys=False, indent=4)
     return jsonformat

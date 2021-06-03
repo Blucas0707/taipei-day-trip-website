@@ -205,6 +205,9 @@ a,a:link,a:visited {
   color: #666666;
 } */
 
+html {
+  opacity: 0;
+}
 
 main {
   padding-top: 54px;
@@ -212,8 +215,14 @@ main {
   margin: auto;
 }
 
-.product {
+.loading {
   display: flex;
+  width: 200px;
+  margin:auto;
+}
+
+.product {
+  display: none;
   max-width: 1200px;
   border-bottom: 1px solid #E8E8E8;
   padding-bottom: 37px;
@@ -223,7 +232,7 @@ main {
 /* image part */
 .img {
   position: relative;
-  max-height: 406px;
+  max-height: 419px;
   width: 45%;
   margin: 0 15px;
   border-radius: 5px;
@@ -443,6 +452,7 @@ input[type='radio']:checked:after {
 }
 
 .description {
+  display: none;
   max-width: 1180px;
   width: 100%;
   margin-top: 50px;

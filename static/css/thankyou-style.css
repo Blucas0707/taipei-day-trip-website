@@ -2,6 +2,9 @@
   margin: 0;
   padding: 0;
 }
+html {
+  opacity: 0;
+}
 
 a, a:link, a:visited {
   color: #438899;
@@ -261,12 +264,12 @@ footer {
   font-style: normal;
   font-weight: normal;
   font-size: 16px;
-  line-height: 13px;
+  line-height: 30px;
   /* or 83% */
   align-items: center;
   color: #666666;
   height: 24px;
-  padding: 35px 90px 40px 90px;
+  padding: 20px 90px 40px 90px;
 }
 
 /* @media (min-width: 1200px) {
@@ -304,9 +307,15 @@ footer {
     .attraction {
       padding-top: 7px;
     }
+
     .greeting {
-      padding: 46px 0 0 10px;
+      padding: 46px 45px 0;
     }
+
+    .payment-status {
+      padding: 20px 45px 190px;
+    }
+
     .attraction-info{
       display: block;
     }

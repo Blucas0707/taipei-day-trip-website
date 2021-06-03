@@ -2,7 +2,9 @@
   margin: 0;
   padding: 0;
 }
-
+html {
+  opacity: 0;
+}
 .hideall {
   display: none;
   position: fixed;
@@ -198,7 +200,9 @@ a,a:link,a:visited {
   line-height: 13px;
   color: #666666;
 } */
-
+/* .main {
+  opacity: 0;
+} */
 .cover {
   padding-top:54px;
   display: flex;
