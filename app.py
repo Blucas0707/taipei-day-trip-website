@@ -3,6 +3,7 @@ from Controller.api_user import *
 from Controller.api_attraction import *
 from Controller.api_booking import *
 from Controller.api_orders import *
+from Controller.api_board import *
 from config import app
 
 # Pages
@@ -18,6 +19,9 @@ def booking():
 @app.route("/thankyou")
 def thankyou():
 	return render_template("thankyou.html")
+@app.route("/board")
+def board():
+	return render_template("board.html")
 
 
 #使用者API
@@ -48,6 +52,10 @@ def api_orders():
 def api_orders_number(orderNumber):
 	return get_api_orders_number(orderNumber)
 
+#Board API
+@app.route("/api/board", methods = ["GET","POST"])
+def api_board():
+	return api_board_handler()
 
 
 #error handle
