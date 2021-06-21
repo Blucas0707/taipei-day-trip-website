@@ -12,7 +12,7 @@ class Order(SQLDB):
             cursor.execute(sql, para)
             con.commit()
             # close sql connect
-            self.close(cursor, con)
+            con.close()
             return 200
         except:
             #rollback DB
@@ -29,7 +29,7 @@ class Order(SQLDB):
             con.commit()
             print("update success")
             # close sql connect
-            self.close(cursor, con)
+            con.close()
             return 200
         except:
             #rollback DB
@@ -44,7 +44,7 @@ class Order(SQLDB):
             cursor.execute(sql, para)
             result = cursor.fetchone()
             # close sql connect
-            self.close(cursor, con)
+            con.close()
 
             if result != None: #exist
                 data_dict = {

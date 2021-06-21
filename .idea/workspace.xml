@@ -3,14 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="16baa4a1-d393-4f7b-91b4-2bd5432d8c25" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/api_board.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/api_board.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/api_user.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/api_user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/RDS_SQL.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/RDS_SQL.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Model/SQL.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/SQL.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/index-style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/index-style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/SQL_order.py" beforeDir="false" afterPath="$PROJECT_DIR$/Model/SQL_order.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +29,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Model" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
