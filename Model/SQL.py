@@ -1,22 +1,23 @@
 import mysql.connector
 import mysql.connector.pooling
 from dotenv import dotenv_values
-
+import json
 #load .env config
 config = dotenv_values("../key/.env")
 
 class SQLDB:
     def __init__(self):
         self.config = {
-            "host":config["SQL_HOST"],
-            "database":config["SQL_DATABASE"],
-            "user":config["SQL_USER"],
-            "password":config["SQL_PASSWORD"],
-            "auth_plugin":"mysql_native_password"
+            "host": config["RDS_SQL_HOST"],
+            "database": json.loads(config["RDS_SQL_DATABASE"])["travel"],
+            "port": config["RDS_SQL_PORT"],
+            "user": config["RDS_SQL_USER"],
+            "password": config["RDS_SQL_PASSWORD"],
+            "auth_plugin": "mysql_native_password"
         }
         self.pool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "mypool",pool_size = 8,pool_reset_session=True,**self.config)
         # self.conn = self.pool.get_connection()
-        print("POOL連線成功")
+        print("POOL連線成功-travel")
     def close(self,cursor ,con):
         cursor.close()
         con.close()
@@ -304,7 +305,7 @@ class SQLDB:
             con.rollback()
             return 500
 
-
+mysql = SQLDB()
 
 
 

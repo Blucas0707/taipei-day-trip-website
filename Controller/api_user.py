@@ -1,4 +1,4 @@
-from Model.SQL import SQLDB
+from Model.SQL import mysql
 import json
 import hashlib
 from flask import *
@@ -9,7 +9,7 @@ from dotenv import dotenv_values
 config = dotenv_values("../key/.env")
 
 #set mysql
-mysql = SQLDB()
+# mysql = SQLDB()
 
 #Error
 def api_internal_error():

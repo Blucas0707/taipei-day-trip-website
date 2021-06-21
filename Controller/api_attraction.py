@@ -1,9 +1,9 @@
-from Model.SQL import SQLDB
+from Model.SQL import mysql
 import json
 from flask import *
 
 #set mysql
-mysql = SQLDB()
+# mysql = SQLDB()
 
 def get_api_attractions():
     # get page & keyword variables
