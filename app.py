@@ -25,7 +25,7 @@ def board():
 #Loading
 @app.route("/loaderio-55efba7b6dd186cc028922fdc0ed48b6")
 def loading():
-	return render_template("loaderio-55efba7b6dd186cc028922fdc0ed48b6.txt")
+	return render_template("loaderio-55efba7b6dd186cc028922fdc0ed48b6.html")
 
 
 #使用者API
