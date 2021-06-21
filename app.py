@@ -23,7 +23,7 @@ def thankyou():
 def board():
 	return render_template("board.html")
 #Loading
-@app.route("/loaderio-55efba7b6dd186cc028922fdc0ed48b6")
+@app.route("/loaderio-55efba7b6dd186cc028922fdc0ed48b6/")
 def loading():
 	return render_template("loaderio-55efba7b6dd186cc028922fdc0ed48b6.html")
 
