@@ -1,4 +1,4 @@
-from Model.RDS_SQL import RDS
+from Model.RDS_SQL import *
 from Model.AWS_S3 import *
 from werkzeug.utils import secure_filename
 import json
@@ -10,6 +10,7 @@ from dotenv import dotenv_values
 #load .env config
 config = dotenv_values("../key/.env")
 
+RDS = RDS_SQLDB()
 
 #Error
 def api_internal_error():

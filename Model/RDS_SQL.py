@@ -15,7 +15,7 @@ class RDS_SQLDB:
             "password":config["RDS_SQL_PASSWORD"],
             "auth_plugin":"mysql_native_password"
         }
-        self.pool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "mypool",pool_size = 8,pool_reset_session=True,**self.config)
+        self.pool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "RDSpool",pool_size = 8,pool_reset_session=True,**self.config)
         # self.conn = self.pool.get_connection()
         print("POOL連線成功-board")
     def close(self,cursor ,con):
@@ -79,7 +79,7 @@ class RDS_SQLDB:
         except:
             return 500
 
-RDS = RDS_SQLDB()
+# RDS = RDS_SQLDB()
 
 
 

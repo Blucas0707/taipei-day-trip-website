@@ -321,6 +321,14 @@ a,a:link,a:visited {
   justify-content: flex-end;
   align-items: center;
 }
+.loading {
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.loading_img {
+  width: 150px;
+}
 
 .nodata {
   width: 100%;

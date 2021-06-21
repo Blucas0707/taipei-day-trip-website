@@ -38,7 +38,7 @@ def api_not_allowed_error():
 
 
 #USER
-def get_api_user(app):
+def get_api_user():
     print(request.method)
     if request.method == "GET":
         return get_user_info_login()
@@ -106,6 +106,7 @@ def user_info_register():
     return jsonformat
 
 def user_info_login():
+    # User().user_info_login()
     data = request.get_json()
     email = str(data["email"])
     password = passwordEncrypt(str(data["password"]))  # password 加密
@@ -138,6 +139,7 @@ def user_info_login():
     return jsonformat
 
 def user_info_logout():
+    # User().user_info_logout()
     #remove session
     removeSession()
     data_dict = {
