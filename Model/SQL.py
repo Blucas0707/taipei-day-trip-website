@@ -15,7 +15,7 @@ class SQLDB:
             "password": config["RDS_SQL_PASSWORD"],
             "auth_plugin": "mysql_native_password"
         }
-        self.pool = pooling.MySQLConnectionPool(pool_name = "SQLpool",pool_size = 8,pool_reset_session=True,**self.config)
+        self.pool = pooling.MySQLConnectionPool(pool_name = "SQLpool",pool_size = 4,pool_reset_session=True,**self.config)
         self.conn = self.pool.get_connection()
         print("Connection Pool Name - ", self.pool.pool_name)
         print("Connection Pool Size - ", self.pool.pool_size)
