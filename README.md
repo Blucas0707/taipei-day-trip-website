@@ -49,4 +49,11 @@ ___
 
 #### TapPay 
 
-<div align=center><img src="https://github.com/Blucas0707/taipei-day-trip-website/blob/develop/README/Flow/user.png" alt="" width="30%"/></div>
+<div align=center><img src="https://github.com/Blucas0707/taipei-day-trip-website/blob/develop/README/Flow/TapPay.png" alt="" width="50%"/></div>
+
+共分成4步驟：
+1. Client 會去跟TapPay Server 取得一組專屬Prime
+2. 將Prime 傳到後端Server作處理
+3. 後端Server 會用這組Prime，去跟TapPay Server 要求付款(TapPay 會去跟Bank Server去請求付款)
+4. 後端Server會接收TapPay付款結果，並回傳付款狀態回Client
+
