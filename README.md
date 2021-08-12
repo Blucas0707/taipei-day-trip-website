@@ -15,7 +15,7 @@ test password:123123123123<br>
 ***
 
 # 功能
-1. 會員：會員註冊（前後端資料錯誤驗證提醒）／登入／登出
+1. 會員：會員註冊（前後端資料錯誤驗證提醒、加密）／登入／登出
 2. 展示：景點展示、捲動式呈現、淡出淡入、
 3. 景點：日期選擇(過期日期判斷)、圖片輪轉式呈現
 4. 金流：信用卡付款（信用卡資訊驗證）
@@ -34,4 +34,19 @@ ___
 
 #### 資料庫配置
 
+共只有一個Database: travel_info <br>
+包含五個table: 
+1. taipei_travel_info: 景點資訊
+2. taipei_travel_booking: 預定資訊
+3. taipei_travel_orders: 訂單資訊
+4. taipei_travel_images: 景點圖片資訊
+6. taipei_travel_user_info: 會員資訊
 
+<div align=center><img src="https://github.com/Blucas0707/taipei-day-trip-website/blob/develop/README/Flow/SQL_tables.png" alt="" width="40%"/></div>
+<div align=center><img src="https://github.com/Blucas0707/taipei-day-trip-website/blob/develop/README/Flow/user.png" alt="" width="30%"/></div>
+
+___
+
+#### TapPay 
+
+<div align=center><img src="https://github.com/Blucas0707/taipei-day-trip-website/blob/develop/README/Flow/user.png" alt="" width="30%"/></div>
