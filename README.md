@@ -22,4 +22,16 @@ test password:123123123123<br>
 
 ***
 
+# 流程圖
+
+<div align=center><img src="https://github.com/Blucas0707/taipei-day-trip-website/blob/develop/README/Flow/flowpng.png" alt="" width="100%"/></div>
+
+### 資料收集＆儲存
+
+利用政府開放API取得台北景點資訊，並存入AWS RDS MySQL中。
+
+___
+
+#### 資料庫配置
+
 
