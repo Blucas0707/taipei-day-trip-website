@@ -47,7 +47,7 @@ ___
 
 ___
 
-#### TapPay 
+### TapPay 
 
 <div align=center><img src="https://github.com/Blucas0707/taipei-day-trip-website/blob/develop/README/Flow/TapPay.png" alt="" width="50%"/></div>
 
