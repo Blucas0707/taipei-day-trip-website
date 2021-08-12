@@ -125,10 +125,11 @@ let models = {
         headers: {"Content-type":"application/json;"},
       }).then((response)=>{
         // console.log(response.json());
-        return response.json();
+        return response.clone().json();
       }).then((result)=>{
+
         this.orderData = result;
-        // console.log(result);
+        console.log(result);
       });
     }
   },
@@ -291,6 +292,7 @@ let views = {
     let greeting = document.querySelector(".greeting");
     let paymentStatus = document.querySelector(".payment-status");
     if(models.order.orderData != null){
+      console.log(models.order.orderData);
       greeting.innerHTML = "您好，" + models.order.orderData.data.contact.name +",";
       paymentStatus.innerHTML ="訂單："+models.order.orderData.data.number+ " 已成立，請歡迎再次下訂！";
     }

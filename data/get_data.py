@@ -1,5 +1,38 @@
 import json
-from SQL import SQLDB
+from mysql.connector import pooling
+from dotenv import dotenv_values
+import json
+#load .env config
+config = dotenv_values("../../key/.env")
+class SQLDB:
+    def __init__(self):
+        self.config = {
+            "host": config["RDS_SQL_HOST"],
+            "database": json.loads(config["RDS_SQL_DATABASE"])["travel"],
+            "port": config["RDS_SQL_PORT"],
+            "user": config["RDS_SQL_USER"],
+            "password": config["RDS_SQL_PASSWORD"],
+            "auth_plugin": "mysql_native_password"
+        }
+        self.pool = pooling.MySQLConnectionPool(pool_name = "SQLpool",pool_size = 4,pool_reset_session=True,**self.config)
+        self.conn = self.pool.get_connection()
+        print("Connection Pool Name - ", self.pool.pool_name)
+        print("Connection Pool Size - ", self.pool.pool_size)
+        print("POOL連線成功-travel")
+
+    def save_image_link(self, para = None):
+        cursor = self.conn.cursor()
+        #link existed or not
+        sql = "select count(*) from taipei_travel_images where link = '%s'"
+        cursor.execute(sql, para[1])
+        result = cursor.fetchone()
+        #link not existed
+        if result[0] == 0:
+            sql = "INSERT INTO taipei_travel_images (attractionid, link) VALUES (%s, %s)"
+            cursor.execute(sql, para)
+            self.conn.commit()
+        else:
+            return False
 
 #Read json file
 with open("taipei-attractions.json") as f:
@@ -41,14 +74,14 @@ for detail in travel_details:
         if para[i] == None:
             para[i] = -1
     para = tuple(para)
-    mysql.Update(para)
+    # mysql.Update(para)
 
     # save image links to sql table - taipei_travel_images
     # only return .jpg or .png image links
     images = get_image_link(detail["file"])
     for link in images:
         para = (id,link)
-        # print(para)
+        print(para)
         mysql.save_image_link(para)
 
 

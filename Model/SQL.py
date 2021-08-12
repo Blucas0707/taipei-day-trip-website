@@ -35,7 +35,7 @@ class SQLDB:
     #     result = cursor.fetchone()
     #     #link not existed
     #     if result[0] == 0:
-    #         sql = "INSERT INTO taipei_travel_images (id, link) VALUES ('%s', '%s')"
+    #         sql = "INSERT INTO taipei_travel_images (attractionid, link) VALUES ('%s', '%s')"
     #         cursor.execute(sql, para)
     #         self.conn.commit()
     #     else:
@@ -75,7 +75,7 @@ class SQLDB:
                     data_dict["data"]["longitude"] = float(result[8])
 
                 # get image link
-                sql = "select link from taipei_travel_images where id = %s "
+                sql = "select link from taipei_travel_images where attractionid = %s "
                 cursor.execute(sql, (para,))
                 results = cursor.fetchall()
                 image_links = []
@@ -133,7 +133,7 @@ class SQLDB:
                     new_dict["latitude"] = float(result[7])
                     new_dict["longitude"] = float(result[8])
                     # get image link
-                    sql = "select link from taipei_travel_images where id = '%s'"
+                    sql = "select link from taipei_travel_images where attractionid = '%s'"
                     cursor.execute(sql, (new_dict["id"],))
                     results = cursor.fetchall()
                     image_links = []
@@ -219,7 +219,7 @@ class SQLDB:
     #Booking
     def establish_booking(self, para =None):
         try:
-            sql = """insert into taipei_travel_booking (email,attractionId,date,time,price)  values (%s,%s,%s,%s,%s)"""
+            sql = """insert into taipei_travel_booking (email,attractionid,date,time,price)  values (%s,%s,%s,%s,%s)"""
             con = self.pool.get_connection()
             cursor = con.cursor()
             cursor.execute(sql, para)
@@ -263,7 +263,7 @@ class SQLDB:
                 name = result[0]
                 address = result[1]
                 #
-                sql = """select link from taipei_travel_images where id = %s limit 1"""
+                sql = """select link from taipei_travel_images where attractionid = %s limit 1"""
                 para = (attractionId,)
                 con = self.pool.get_connection()
                 cursor = con.cursor()

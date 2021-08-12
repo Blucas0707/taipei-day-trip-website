@@ -552,7 +552,7 @@ let controller = {
               let fadeout = new Promise(views.fadeout);
               fadeout.then(()=>{
                 //redirect to booking page
-                window.location.replace("/booking");
+                window.location.assign("/booking");
               });
             });
           }
