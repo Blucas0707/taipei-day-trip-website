@@ -1,7 +1,7 @@
 import mysql.connector
 import mysql.connector.pooling
 from dotenv import dotenv_values
-
+import json
 #load .env config
 config = dotenv_values("../key/.env")
 # print(config)
@@ -9,15 +9,15 @@ class RDS_SQLDB:
     def __init__(self):
         self.config = {
             "host":config["RDS_SQL_HOST"],
-            "database":config["RDS_SQL_DATABASE"],
+            "database":json.loads(config["RDS_SQL_DATABASE"])["board"],
             "port":config["RDS_SQL_PORT"],
             "user":config["RDS_SQL_USER"],
             "password":config["RDS_SQL_PASSWORD"],
             "auth_plugin":"mysql_native_password"
         }
-        self.pool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "mypool",pool_size = 8,pool_reset_session=True,**self.config)
+        self.pool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "RDSpool",pool_size = 4,pool_reset_session=True,**self.config)
         # self.conn = self.pool.get_connection()
-        print("RDS POOL連線成功")
+        print("POOL連線成功-board")
     def close(self,cursor ,con):
         cursor.close()
         con.close()
@@ -79,7 +79,7 @@ class RDS_SQLDB:
         except:
             return 500
 
-RDS = RDS_SQLDB()
+# RDS = RDS_SQLDB()
 
 
 

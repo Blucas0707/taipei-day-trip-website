@@ -40,9 +40,7 @@ def get_api_orders():
         else:
             # save into SQL
             order_unpaid = 1 # unpaid
-            para = (
-                order_number, order_unpaid , price, attractionId, attractionName, attractionAddress, attractionImage, date, time, name,
-                email,phone)
+            para = (order_number, order_unpaid , price, attractionId, date, time, name, email,phone)
             # sql
             results = Order().establish_order(para)
 

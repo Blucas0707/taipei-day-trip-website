@@ -22,12 +22,16 @@ def thankyou():
 @app.route("/board")
 def board():
 	return render_template("board.html")
+#Loading
+@app.route("/loaderio-4b62e4c0adff3eb72f898f54da5da963/")
+def loading():
+	return render_template("loaderio-4b62e4c0adff3eb72f898f54da5da963.html")
 
 
 #使用者API
 @app.route("/api/user", methods = ["GET","POST","PATCH","DELETE"])
 def api_user():
-	return get_api_user(app)
+	return get_api_user()
 
 #旅遊景點API
 @app.route("/api/attractions", methods = ["GET"])
@@ -71,5 +75,5 @@ def not_found_error(error):
 def not_allowed_error(error):
 	return api_not_allowed_error()
 
-app.run(host="0.0.0.0", port=3000, debug = True)
+app.run(host="0.0.0.0", port=3000, debug = False)
 # app.run(port=3000)

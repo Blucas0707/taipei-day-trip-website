@@ -1,25 +1,25 @@
 import mysql.connector
-import mysql.connector.pooling
+from mysql.connector import pooling
 from dotenv import dotenv_values
-
+import json
 #load .env config
 config = dotenv_values("../key/.env")
 
 class SQLDB:
     def __init__(self):
         self.config = {
-            "host":config["SQL_HOST"],
-            "database":config["SQL_DATABASE"],
-            "user":config["SQL_USER"],
-            "password":config["SQL_PASSWORD"],
-            "auth_plugin":"mysql_native_password"
+            "host": config["RDS_SQL_HOST"],
+            "database": json.loads(config["RDS_SQL_DATABASE"])["travel"],
+            "port": config["RDS_SQL_PORT"],
+            "user": config["RDS_SQL_USER"],
+            "password": config["RDS_SQL_PASSWORD"],
+            "auth_plugin": "mysql_native_password"
         }
-        self.pool = mysql.connector.pooling.MySQLConnectionPool(pool_name = "mypool",pool_size = 8,pool_reset_session=True,**self.config)
-        # self.conn = self.pool.get_connection()
-        print("POOL連線成功")
-    def close(self,cursor ,con):
-        cursor.close()
-        con.close()
+        self.pool = pooling.MySQLConnectionPool(pool_name = "SQLpool",pool_size = 4,pool_reset_session=True,**self.config)
+        self.conn = self.pool.get_connection()
+        print("Connection Pool Name - ", self.pool.pool_name)
+        print("Connection Pool Size - ", self.pool.pool_size)
+        print("POOL連線成功-travel")
 
     # def Update(self, para= None):
     #     sql = "REPLACE INTO taipei_travel_info (id, name, category, description, address, transport, mrt, latitude, longitude) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')"
@@ -35,7 +35,7 @@ class SQLDB:
     #     result = cursor.fetchone()
     #     #link not existed
     #     if result[0] == 0:
-    #         sql = "INSERT INTO taipei_travel_images (id, link) VALUES ('%s', '%s')"
+    #         sql = "INSERT INTO taipei_travel_images (attractionid, link) VALUES ('%s', '%s')"
     #         cursor.execute(sql, para)
     #         self.conn.commit()
     #     else:
@@ -75,7 +75,7 @@ class SQLDB:
                     data_dict["data"]["longitude"] = float(result[8])
 
                 # get image link
-                sql = "select link from taipei_travel_images where id = %s "
+                sql = "select link from taipei_travel_images where attractionid = %s "
                 cursor.execute(sql, (para,))
                 results = cursor.fetchall()
                 image_links = []
@@ -83,7 +83,7 @@ class SQLDB:
                     image_links.append(result[0])
                 data_dict["data"]["images"] = image_links
                 #close sql connect
-                self.close(cursor,con)
+                con.close()
 
         except:
             # rollback DB
@@ -103,6 +103,8 @@ class SQLDB:
             "data":[]
         }
         con = self.pool.get_connection()
+        # pcon = pooling.PooledMySQLConnection(self.pool,self.conn)
+        # con = self.pool.get_connection()
         cursor = con.cursor()
         try:
             if keyword == "":
@@ -131,7 +133,7 @@ class SQLDB:
                     new_dict["latitude"] = float(result[7])
                     new_dict["longitude"] = float(result[8])
                     # get image link
-                    sql = "select link from taipei_travel_images where id = '%s'"
+                    sql = "select link from taipei_travel_images where attractionid = '%s'"
                     cursor.execute(sql, (new_dict["id"],))
                     results = cursor.fetchall()
                     image_links = []
@@ -141,7 +143,7 @@ class SQLDB:
                     new_dict["images"] = image_links
                     data_dict["data"].append(new_dict)
             # close sql connect
-            self.close(cursor, con)
+            con.close()
             return data_dict
         except:
             # rollback DB
@@ -164,7 +166,7 @@ class SQLDB:
                     cursor.execute(sql, para)
                     con.commit()
                     # close sql connect
-                    self.close(cursor, con)
+                    con.close()
                     return 200
                 except:
                     # rollback DB
@@ -187,7 +189,7 @@ class SQLDB:
             cursor.execute(sql, para)
             result = cursor.fetchone()
             # close sql connect
-            self.close(cursor, con)
+            con.close()
             if result[0] == 1:  # user info match
                 return 200
             else:
@@ -207,7 +209,7 @@ class SQLDB:
             results = cursor.fetchone()
 
             # close sql connect
-            self.close(cursor, con)
+            con.close()
             return results
         except:
             # rollback DB
@@ -217,13 +219,13 @@ class SQLDB:
     #Booking
     def establish_booking(self, para =None):
         try:
-            sql = """insert into taipei_travel_booking (email,attractionId,date,time,price)  values (%s,%s,%s,%s,%s)"""
+            sql = """insert into taipei_travel_booking (email,attractionid,date,time,price)  values (%s,%s,%s,%s,%s)"""
             con = self.pool.get_connection()
             cursor = con.cursor()
             cursor.execute(sql, para)
             con.commit()
             # close sql connect
-            self.close(cursor, con)
+            con.close()
             return 200
         except:
             # rollback DB
@@ -238,7 +240,7 @@ class SQLDB:
             cursor.execute(sql, para)
             result = cursor.fetchone()
             # close sql connect
-            self.close(cursor, con)
+            con.close()
 
             if result != None : # not null
                 # print(f"para = {para},result={result}")
@@ -256,19 +258,19 @@ class SQLDB:
                 cursor.execute(sql, para)
                 result = cursor.fetchone()
                 # close sql connect
-                self.close(cursor, con)
+                con.close()
                 # print(f"para = {para},result={result}")
                 name = result[0]
                 address = result[1]
                 #
-                sql = """select link from taipei_travel_images where id = %s limit 1"""
+                sql = """select link from taipei_travel_images where attractionid = %s limit 1"""
                 para = (attractionId,)
                 con = self.pool.get_connection()
                 cursor = con.cursor()
                 cursor.execute(sql, para)
                 result = cursor.fetchone()
                 # close sql connect
-                self.close(cursor, con)
+                con.close()
                 image = result[0]
                 #
 
@@ -297,14 +299,14 @@ class SQLDB:
             print(f"para={para}")
             con.commit()
             # close sql connect
-            self.close(cursor, con)
+            con.close()
             return 200
         except:
             # rollback DB
             con.rollback()
             return 500
 
-
+mysql = SQLDB()
 
 
 

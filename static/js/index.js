@@ -324,11 +324,15 @@ let views={
     //judge load completed
     if(totalScroll > bodyHeight * 0.95 && models.nextPage!=null && views.need_scrolldown){
       // console.log("scrolldown activate");
+      //show loading.gif
+      let loading = document.querySelector(".loading");
+      loading.style.display = "flex";
       views.need_scrolldown = false;
       models.getProductData().then(()=>{
-        views.renderData()
+        views.renderData();
       }).then(()=>{
         views.need_scrolldown = true;
+        loading.style.display = "none";
       });
     }
   },
