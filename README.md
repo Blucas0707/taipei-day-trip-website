@@ -6,14 +6,6 @@
 
 ***
 
-# Demo
-
-click <a href="https://taipei-travel.blucas0707.com/">here</a><br>
-test account:123123123123@gmail.com<br>
-test password:123123123123<br>
-
-***
-
 # 功能
 1. 會員：會員註冊（前後端資料錯誤驗證提醒、加密）／登入／登出
 2. 展示：景點展示、捲動式呈現、淡出淡入、
